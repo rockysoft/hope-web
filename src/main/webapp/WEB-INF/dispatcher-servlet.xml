@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:mvc="http://www.springframework.org/schema/mvc"  
+    xmlns:util="http://www.springframework.org/schema/util"  
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+                     http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+                     http://www.springframework.org/schema/context   
+                     http://www.springframework.org/schema/context/spring-context-3.2.xsd  
+                     http://www.springframework.org/schema/util        
+                     http://www.springframework.org/schema/util/spring-util-3.2.xsd  
+                     http://www.springframework.org/schema/mvc   
+                     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">  
+  
+    <!-- spring自动扫描注解的组件 -->  
+    <context:component-scan base-package="com.github.rockysoft"  
+        use-default-filters="false">  
+        <context:include-filter expression="org.springframework.stereotype.Controller"  
+            type="annotation" />  
+    </context:component-scan>  
+  
+    <mvc:annotation-driven>  
+        <mvc:message-converters>  
+          
+            <ref bean="jacksonMessageConverter" />   
+        </mvc:message-converters>  
+    </mvc:annotation-driven>  
+  
+    <bean id="stringHttpMessageConverter"  
+        class="org.springframework.http.converter.StringHttpMessageConverter">  
+        <constructor-arg value="UTF-8" index="0"></constructor-arg><!--  
+            避免出现乱码 -->  
+        <property name="supportedMediaTypes">  
+            <list>  
+                <value>text/plain;charset=UTF-8</value>  
+            </list>  
+        </property>  
+    </bean>
+    <bean id="jacksonMessageConverter"
+				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" >
+				 
+  	</bean>
+  
+    <!-- 返回类型定义 -->  
+    <util:list id="messageConverters">  
+        <ref bean="stringHttpMessageConverter" />  
+        <ref bean="jacksonMessageConverter" />   
+    </util:list>
+  
+    <!-- 不进行拦截的 -->  
+    <!--  
+    <mvc:resources location="/" mapping="/**/*.html" order="0" />  
+    <mvc:resources location="/images/" mapping="/images/**" />
+    <mvc:resources location="/js/" mapping="/js/**" />  
+    <mvc:resources location="/css/" mapping="/css/**" />  
+    <mvc:resources location="/plugin/" mapping="/plugin/**" />
+    <mvc:resources location="/download/" mapping="/download/**" />
+    <mvc:resources location="/WEB-INF/views/" mapping="/**" />  
+  	-->
+  	<mvc:default-servlet-handler />
+  	
+    <bean id="messageSource"  
+        class="org.springframework.context.support.ResourceBundleMessageSource">  
+        <property name="basenames">
+			<list>
+				<value>/WEB-INF/messages/messages</value>
+			</list>
+		</property> 
+    </bean>
+    
+    <!-- 定义首页 -->
+	<mvc:view-controller path="/" view-name="redirect:/home" />
+  
+    <bean  
+        class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/views/" />  
+        <property name="suffix" value=".jsp" />  
+  
+    </bean>  
+  
+    <!-- 支持上传文件 -->  <!-- 
+    <bean id="multipartResolver"  
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />  
+  --> 
+    <!-- restTemplate -->  
+    <bean id="restTemplate" class="org.springframework.web.client.RestTemplate">  
+        <property name="messageConverters" ref="messageConverters">  
+        </property>  
+    </bean>  
+</beans>  

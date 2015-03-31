@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rockysoft.mapper.ResourceMapper" >
+  <resultMap id="BaseResultMap" type="com.github.rockysoft.entity.Resource" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ICON_CLS" property="iconCls" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="VARCHAR" />  
+	<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />    
+	<result column="IS_LEAF" property="isLeaf" jdbcType="INTEGER" />     
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.nameLike != null" >
+         <![CDATA[ and NAME LIKE '%'||#{condition.nameLike}||'%' ]]>
+      </if>
+      <if test="condition.name != null" >
+         and NAME = #{condition.name}
+      </if>
+      <if test="condition.description != null" >
+         and DESCRIPTION = #{condition.description}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, NAME, DESCRIPTION, URL, TYPE, ICON_CLS, SORT, PARENT_ID, IS_LEAF
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.github.rockysoft.entity.Criteria" >
+  <!--
+    <include refid="common.Oracle_Pagination_Head" />
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+    <!--
+    <include refid="common.Oracle_Pagination_Tail" />
+    -->
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from RESOURCE
+    where ID = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from RESOURCE
+    where ID = #{id}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.github.rockysoft.entity.Criteria" >
+    delete from RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.github.rockysoft.entity.Resource" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    insert into RESOURCE (ID, NAME, DESCRIPTION, URL, TYPE, ICON_CLS, SORT, PARENT_ID, IS_LEAF)
+    values (#{id}, #{name}, #{description}, #{url},#{type},#{iconCls},#{sort},#{parentId},#{isLeaf})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.rockysoft.entity.Resource" >
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    insert into RESOURCE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      ID,
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="iconCls != null" >
+        ICON_CLS,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="isLeaf != null" >
+        IS_LEAF,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{resourceId},
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="url != null" >
+        #{url},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="iconCls != null" >
+        #{iconCls},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="parentId != null" >
+        #{parentId},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.github.rockysoft.entity.Criteria" resultType="java.lang.Integer" >
+    select count(*) from RESOURCE
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update RESOURCE
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION = #{record.description},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update RESOURCE
+    set ID = #{record.id},
+      NAME = #{record.name},
+      DESCRIPTION = #{record.description}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.rockysoft.entity.Resource" >
+    update RESOURCE
+    <set >
+      <if test="name != null" >
+        NAME = #{name},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description},
+      </if>
+      <if test="url != null" >
+        URL = #{url},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type},
+      </if>
+      <if test="iconCls != null" >
+        ICON_CLS = #{iconCls},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId},
+      </if>
+      <if test="isLeaf != null" >
+        IS_LEAF = #{isLeaf},
+      </if>
+    </set>
+    where ID = #{id}
+  </update>   
+  <update id="updateByPrimaryKey" parameterType="com.github.rockysoft.entity.Resource" >
+    update RESOURCE
+    set NAME = #{resourceName},
+      DESCRIPTION = #{resourceDesc},
+      URL = #{url},
+      TYPE = #{type},
+      ICON_CLS = #{iconCls},
+      SORT = #{sort},
+      PARENT_ID = #{parentId},
+      IS_LEAF = #{isLeaf}
+    where ID = #{id}
+  </update>
+  <select id="getRoleListByUserId" parameterType="long" resultMap="BaseResultMap">        
+        SELECT a.id, a.name FROM RESOURCE a
+		left join USER_ROLE  b
+		on a.id =b.role_id
+		where b.user_id =#{user_id}      
+    </select>
+
+  <select id="getResourceListByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">        
+        SELECT a.* FROM RESOURCE a
+		left join ROLE_RESOURCE b
+		on a.id =b.resource_id
+		where b.role_id =#{role_id}     
+    </select>
+
+</mapper>

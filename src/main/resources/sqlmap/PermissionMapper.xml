@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rockysoft.mapper.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.github.rockysoft.entity.Permission" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.nameLike != null" >
+         <![CDATA[ and NAME LIKE '%'||#{condition.nameLike}||'%' ]]>
+      </if>
+      <if test="condition.name != null" >
+         and NAME = #{condition.name}
+      </if>
+      <if test="condition.description != null" >
+         and DESCRIPTION = #{condition.description}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, NAME, DESCRIPTION
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.github.rockysoft.entity.Criteria" >
+  <!--
+    <include refid="common.Oracle_Pagination_Head" />
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from PERMISSION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+    <!--
+    <include refid="common.Oracle_Pagination_Tail" />
+    -->
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PERMISSION
+    where ID = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PERMISSION
+    where ID = #{id}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.github.rockysoft.entity.Criteria" >
+    delete from PERMISSION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.github.rockysoft.entity.Permission" useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
+    <!--
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    -->
+    insert into PERMISSION (NAME, DESCRIPTION)
+    values (#{name}, #{description})
+    <selectKey resultType="java.lang.Integer" keyProperty="id"  order="AFTER">  
+        SELECT LAST_INSERT_ID() AS ID  
+    </selectKey> 
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.rockysoft.entity.Permission"  useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
+    <!--
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    -->
+    insert into PERMISSION
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="name != null" >
+        #{name},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Integer" keyProperty="id"  order="AFTER">  
+        SELECT LAST_INSERT_ID() AS ID  
+    </selectKey>  
+  </insert>
+  <select id="countByExample" parameterType="com.github.rockysoft.entity.Criteria" resultType="java.lang.Integer" >
+    select count(*) from PERMISSION
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update PERMISSION
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION = #{record.description},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update PERMISSION
+    set ID = #{record.id},
+      NAME = #{record.name},
+      DESCRIPTION = #{record.description}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.rockysoft.entity.Permission" >
+    update PERMISSION
+    <set >
+      <if test="name != null" >
+        NAME = #{name},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description},
+      </if>
+    </set>
+    where ID = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.github.rockysoft.entity.Permission" >
+    update PERMISSION
+    set NAME = #{name},
+      DESCRIPTION = #{description}
+    where ID = #{id}
+  </update>
+  <select id="getRoleListByUserId" parameterType="long" resultMap="BaseResultMap">        
+        SELECT a.id, a.name FROM PERMISSION a
+		left join USER_ROLE  b
+		on a.id =b.role_id
+		where b.user_id =#{user_id}      
+    </select>
+
+	<select id="getPermissionListByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap">        
+        SELECT a.* FROM PERMISSION a
+		left join ROLE_PERMISSION b
+		on a.id =b.permission_id
+		where b.role_id =#{role_id}     
+  </select>
+</mapper>

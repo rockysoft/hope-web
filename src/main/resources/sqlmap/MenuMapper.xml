@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rockysoft.mapper.MenuMapper" >
+  <resultMap id="BaseResultMap" type="com.github.rockysoft.entity.Menu" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="TEXT" property="text" jdbcType="VARCHAR" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="URL" property="url" jdbcType="VARCHAR" />
+    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+    <result column="ICON_CLS" property="iconCls" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+    <result column="CONTROLLER" property="controller" jdbcType="VARCHAR" />
+    <result column="BUTTONS" property="buttons" jdbcType="VARCHAR" />
+	<result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+	<result column="IS_VISIBLE"  property="isVisible" jdbcType="INTEGER" />    
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.textLike != null" >
+         <![CDATA[ and TEXT LIKE '%'||#{condition.textLike}||'%' ]]>
+      </if>
+      <if test="condition.text != null" >
+         and TEXT = #{condition.text}
+      </if>
+      <if test="condition.description != null" >
+         and DESCRIPTION = #{condition.description}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, TEXT, DESCRIPTION, URL, TYPE, ICON_CLS, SORT, CONTROLLER, BUTTONS, PARENT_ID, IS_VISIBLE
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.github.rockysoft.entity.Criteria" >
+  <!--
+    <include refid="common.Oracle_Pagination_Head" />
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from MENU
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+    <!--
+    <include refid="common.Oracle_Pagination_Tail" />
+    -->
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from MENU
+    where ID = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from MENU
+    where ID = #{id}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.github.rockysoft.entity.Criteria" >
+    delete from MENU
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.github.rockysoft.entity.Menu"  useGeneratedKeys="true" keyProperty="id"  keyColumn="id" >
+  	<!--
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    -->
+    insert into MENU (TEXT, DESCRIPTION, URL, TYPE, ICON_CLS, SORT, CONTROLLER, BUTTONS, PARENT_ID, IS_VISIBLE)
+    values (#{text}, #{description}, #{url},#{type},#{iconCls},#{sort},#{controller},#{buttons},#{parentId},#{isVisible})
+    <selectKey resultType="java.lang.Integer" keyProperty="id"  order="AFTER">  
+        SELECT LAST_INSERT_ID() AS ID  
+    </selectKey> 
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.rockysoft.entity.Menu" useGeneratedKeys="true" keyProperty="id"  keyColumn="id">
+    <!--
+    <selectKey resultType="java.lang.String" keyProperty="id" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    -->
+    insert into MENU
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="text != null" >
+        TEXT,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="url != null" >
+        URL,
+      </if>
+      <if test="type != null" >
+        TYPE,
+      </if>
+      <if test="iconCls != null" >
+        ICON_CLS,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="controller != null" >
+        CONTROLLER,
+      </if>
+      <if test="buttons != null" >
+        BUTTONS,
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID,
+      </if>
+      <if test="isVisible != null" >
+        IS_VISIBLE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="text != null" >
+        #{text},
+      </if>
+      <if test="description != null" >
+        #{description},
+      </if>
+      <if test="url != null" >
+        #{url},
+      </if>
+      <if test="type != null" >
+        #{type},
+      </if>
+      <if test="iconCls != null" >
+        #{iconCls},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="controller != null" >
+        #{controller},
+      </if>
+      <if test="buttons != null" >
+        #{buttons},
+      </if>
+      <if test="parentId != null" >
+        #{parentId},
+      </if>
+      <if test="isVisible != null" >
+        #{isVisible},
+      </if>
+    </trim>
+    <selectKey resultType="java.lang.Integer" keyProperty="id"  order="AFTER">  
+        SELECT LAST_INSERT_ID() AS ID  
+    </selectKey> 
+  </insert>
+  <select id="countByExample" parameterType="com.github.rockysoft.entity.Criteria" resultType="java.lang.Integer" >
+    select count(*) from MENU
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update MENU
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION = #{record.description},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update MENU
+    set ID = #{record.id},
+      NAME = #{record.name},
+      DESCRIPTION = #{record.description}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.rockysoft.entity.Menu" >
+    update MENU
+    <set >
+      <if test="name != null" >
+        TEXT = #{text},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description},
+      </if>
+      <if test="url != null" >
+        URL = #{url},
+      </if>
+      <if test="type != null" >
+        TYPE = #{type},
+      </if>
+      <if test="iconCls != null" >
+        ICON_CLS = #{iconCls},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort},
+      </if>
+      <if test="controller != null" >
+        CONTROLLER = #{controller},
+      </if>
+      <if test="buttons != null" >
+        BUTTONS = #{buttons},
+      </if>
+      <if test="parentId != null" >
+        PARENT_ID = #{parentId},
+      </if>
+      <if test="isVisible != null" >
+        IS_VISIBLE = #{isVisible},
+      </if>
+    </set>
+    where ID = #{id}
+  </update>   
+  <update id="updateByPrimaryKey" parameterType="com.github.rockysoft.entity.Menu" >
+    update MENU
+    set TEXT = #{text},
+      DESCRIPTION = #{description},
+      URL = #{url},
+      TYPE = #{type},
+      ICON_CLS = #{iconCls},
+      SORT = #{sort},
+      CONTROLLER = #{controller},
+      BUTTONS = #{buttons},
+      PARENT_ID = #{parentId},
+      IS_VISIBLE = #{isVisible}
+    where ID = #{id}
+  </update>
+  <select id="getRoleListByUserId" parameterType="long" resultMap="BaseResultMap">        
+        SELECT a.id, a.name FROM MENU a
+		left join USER_ROLE  b
+		on a.id =b.role_id
+		where b.user_id =#{user_id}      
+    </select>
+
+  <select id="getMenuListByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">        
+        SELECT a.* FROM MENU a
+		left join ROLE_MENU b
+		on a.id =b.menu_id
+		where b.role_id =#{role_id}     
+    </select>
+    
+    <select id="getMenuListByRoleIds" resultMap="BaseResultMap">        
+        SELECT distinct a.* FROM MENU a
+		left join ROLE_MENU b
+		on a.id =b.menu_id
+		where b.role_id in  
+ 		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+  			#{item}  
+ 		</foreach>    
+    </select>
+
+</mapper>

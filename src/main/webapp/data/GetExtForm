@@ -1,0 +1,1 @@
+﻿{"data":[{"Id":8,"ParentId":3,"MenuName":"菜单管理","MenuLink":"infrastructure.rolemenus","MenuConfig":null,"MenuButtons":"Add,Edit,Delete,Sync","ControllerName":"RoleMenu","IconClass":"aa","SortOrder":220,"children":null,"leaf":false,"expanded":false,"HasConfigs":0}]}

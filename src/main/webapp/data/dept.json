@@ -1,0 +1,9 @@
+{"children":[{"id":"1","text":"公司","iconCls":null,"expanded":true,"leaf":false,"checked":false,"children":[
+	{"id":"2","text":"财务部","iconCls":null,"expanded":false,"leaf":false,"checked":false,"children":[
+		{"id":"5","text":"645645","iconCls":null,"expanded":false,"leaf":true,"checked":false,"children":[]}
+	]},
+	{"id":"3","text":"人力资源部","iconCls":null,"expanded":false,"leaf":false,"checked":false,"children":[
+		{"id":"4","text":"11212","iconCls":null,"expanded":false,"leaf":true,"checked":false,"children":[]}
+	]}
+]}]
+}

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.rockysoft.mapper.DepartmentMapper" >
+  <resultMap id="BaseResultMap" type="com.github.rockysoft.entity.Department" >
+    <id column="DEPT_ID" property="deptId" jdbcType="INTEGER" />
+    <result column="DEPT_NAME" property="deptName" jdbcType="VARCHAR" />
+    <result column="SORT" property="sort" jdbcType="INTEGER" />
+	<result column="DEPT_PARENT_ID" property="deptParentId" jdbcType="INTEGER" />
+	<result column="LEAF" property="leaf" jdbcType="INTEGER" />   
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <trim prefix="where" prefixOverrides="and|or" >
+      <if test="condition.deptNameLike != null" >
+         <![CDATA[ and DEPT_NAME LIKE '%'||#{condition.deptNameLike}||'%' ]]>
+      </if>
+      <if test="condition.deptName != null" >
+         and DEPT_NAME = #{condition.deptName}
+      </if>
+    </trim>
+  </sql>
+  <sql id="Base_Column_List" >
+    DEPT_ID, DEPT_NAME, SORT, DEPT_PARENT_ID, LEAF
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.github.rockysoft.entity.Criteria" >
+  <!--
+    <include refid="common.Oracle_Pagination_Head" />
+    -->
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from DEPARTMENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <include refid="common.Mysql_Pagination_Limit" />
+    <!--
+    <include refid="common.Oracle_Pagination_Tail" />
+    -->
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from DEPARTMENT
+    where DEPT_ID = #{deptId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from DEPARTMENT
+    where DEPT_ID = #{deptId}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.github.rockysoft.entity.Criteria" >
+    delete from DEPARTMENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.github.rockysoft.entity.Department" >
+    <selectKey resultType="java.lang.String" keyProperty="deptId" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    insert into DEPARTMENT (DEPT_ID, DEPT_NAME, SORT, DEPT_PARENT_ID, LEAF)
+    values (#{deptId}, #{deptName}, #{sort},#{deptParentId}, #{leaf})
+  </insert>
+  <insert id="insertSelective" parameterType="com.github.rockysoft.entity.Department" >
+    <selectKey resultType="java.lang.String" keyProperty="deptId" order="BEFORE" >
+      select REPLACE(uuid(),'-','')
+    </selectKey>
+    insert into DEPARTMENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      DEPT_ID,
+      <if test="deptName != null" >
+        DEPT_NAME,
+      </if>
+      <if test="sort != null" >
+        SORT,
+      </if>
+      <if test="deptParentId != null" >
+        DEPT_PARENT_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      #{deptId},
+      <if test="deptName != null" >
+        #{deptName},
+      </if>
+      <if test="sort != null" >
+        #{sort},
+      </if>
+      <if test="deptParentId != null" >
+        #{deptParentId},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.github.rockysoft.entity.Criteria" resultType="java.lang.Integer" >
+    select count(*) from DEPARTMENT
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update DEPARTMENT
+    <set >
+      <if test="record.deptId != null" >
+        DEPT_ID = #{record.deptId},
+      </if>
+      <if test="record.deptName != null" >
+        NAME = #{record.deptName},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update DEPARTMENT
+    set DEPT_ID = #{record.deptId},
+      DEPT_NAME = #{record.deptName}
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.github.rockysoft.entity.Department" >
+    update DEPARTMENT
+    <set >
+      <if test="deptName != null" >
+        DEPT_NAME = #{deptName},
+      </if>
+      <if test="sort != null" >
+        SORT = #{sort},
+      </if>
+      <if test="parentId != null" >
+        DEPT_PARENT_ID = #{deptParentId},
+      </if>
+    </set>
+    where DEPT_ID = #{deptId}
+  </update>   
+  <update id="updateByPrimaryKey" parameterType="com.github.rockysoft.entity.Department" >
+    update DEPARTMENT
+    set DEPT_NAME = #{deptName},
+      SORT = #{sort},
+      DEPT_PARENT_ID = #{deptParentId}
+    where DEPT_ID = #{deptId}
+  </update>
+  <select id="getRoleListByUserId" parameterType="long" resultMap="BaseResultMap">        
+        SELECT a.id, a.name FROM DEPARTMENT a
+		left join USER_ROLE  b
+		on a.id =b.role_id
+		where b.user_id =#{user_id}      
+    </select>
+ <!-- 
+  <select id="getPermissionListByRoleId" parameterType="long" resultMap="resourceResultMap">        
+        SELECT a.* FROM RESOURCE a
+		left join ROLE_RESOURCE b
+		on a.id =b.resource_id
+		where b.role_id =#{role_id}     
+    </select>
+-->
+</mapper>
