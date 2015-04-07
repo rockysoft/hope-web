@@ -69,7 +69,6 @@ Ext.define('Hope.app.sys.userlist', {
              {name: 'email', mapping: 'email', type: 'string'},
              {name: 'mobile', mapping: 'mobile', type: 'string'},
              {name: 'officePhone', mapping: 'officePhone', type: 'string', persist: true},
-             //{name: 'lastLoginTime', mapping: 'lastLoginTime', type: 'string'},
              {name: 'lastLoginTime', mapping: 'lastLoginTime', type: 'date', dateFormat:'c'},
              {name: 'lastLoginIp', mapping: 'lastLoginIp', type: 'string'},
              {name: 'status', mapping: 'status', type: 'string'}
@@ -82,10 +81,17 @@ Ext.define('Hope.app.sys.userlist', {
             proxyDeleteUrl: appBaseUri+'account/users/remove',//'User/Delete',
             extraParams: me.extraParams
         });
+        
+        // configure whether filter query is encoded or not (initially)
+    		var encode = false;
+    
+    		// configure whether filtering is performed locally or remotely (initially)
+    		var local = true;
 
         var filters = {
             ftype: 'filters',
-            encode: true,
+            encode: encode,
+            local: local,
             filters: [{
                 type: 'string',
                 dataIndex: 'loginName'

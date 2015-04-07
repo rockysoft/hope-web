@@ -22,10 +22,17 @@ Ext.define('Hope.app.sys.roleactions', {
             proxyDeleteUrl: appBaseUri+'account/permissions/remove'//,//'RoleAction/Delete',
             //sortProperty: 'ActionUrl'
         });
+        
+        // configure whether filter query is encoded or not (initially)
+    		var encode = false;
+    
+    		// configure whether filtering is performed locally or remotely (initially)
+    		var local = true;
 
         var filters = {
             ftype: 'filters',
-            encode: true,
+            encode: encode,
+            local: local,
             filters: [{
                 type: 'string',
                 dataIndex: 'name'
