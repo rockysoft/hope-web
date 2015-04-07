@@ -112,12 +112,29 @@ Ext.onReady(function () {
 
     var menuTreeStore = Ext.create('Ext.data.TreeStore', {
         autoLoad: true,
+                listeners: {
+                    load: function(treestore, node, records, successful, eOpts ) {
+                        if(successful){
+                        }else {
+                        	//Hope.errTip("会话已过期 ，请重新登录！");
+                        	//top.location.href = appBaseUri+'logout';
+                     		Ext.MessageBox.confirm('提示', '会话已过期 ，重新登录?' , function(btn){
+                        		if(btn == "yes"){  
+                        			top.location.href = appBaseUri+'logout';
+                        		}  
+                    		})
+                        }
+                    }
+                },
         proxy: {
             type: 'ajax',
             url: appBaseUri+'account/menus/GetAuthorizedMenus',
             reader: {
                 type: 'json',
-                root: 'children'
+                root: 'children',
+                    listeners: {
+                        exception: function(proxy, response, operation, eOpts){ alert('exception'); }
+                    }
             }
         }
     });
@@ -188,6 +205,30 @@ Ext.onReady(function () {
                     });
                 }
             }
+            /*
+            ,
+             load:function(store,record,successful,operation,eOpts)
+                        {      
+                                var id=0;
+                                if(record.data.id!="root")  id=record.data.id;
+                                Ext.Ajax.request({
+                                    url: '/bookmgr/functionlist', //返回数据格式：[{id:0,text:''},{id:1,text:'',leaf:true}]
+                                    params:{id:id},
+                                    success: function(response){
+                                        var list=Ext.JSON.decode(response.responseText);
+                                        record.removeAll(true);
+                                        for(var i=0;i<list.length;i++)
+                                        {
+                                                record.appendChild({text:list[i].text,leaf:list[i].leaf,id:list[i].id});
+                                        }
+                                    },
+                                    failure:function(response)
+                                    {
+                                            
+                                    }
+                                });
+                        }
+                        */
         }
     });
 
@@ -204,13 +245,13 @@ Ext.onReady(function () {
                 align: 'middle'
             },
             defaults: {
-                xtype: 'component',
+                xtype: 'component'
                 //margins : '10'  
             },
             items: [{
                 id: 'app-header-title',
                 html: appName,
-                minWidth:160,
+                minWidth:160
             }, {
                 id: 'app-header-gohome',
                 style:' text-align:center;',
@@ -229,7 +270,7 @@ Ext.onReady(function () {
                 text: '修改密码',
                 iconCls: 'icon_key',
                 handler: function () {
-                    Hope.openWindow('修改密码', 'profile.changpwd', 300);
+                    Hope.openWindow('修改密码', 'profile.changepwd', 300);
                 }
             }, {
                 text: '修改资料',
@@ -241,7 +282,7 @@ Ext.onReady(function () {
                 {
                 text: '安全退出',
                 handler: function () {
-                        Ext.MessageBox.confirm('提示', '确定要退出系统吗?' , function(btn){  
+                        Ext.MessageBox.confirm('提示', '确定要退出系统吗?' , function(btn){
                         	if(btn == "yes"){  top.location.href = appBaseUri+'logout';
                         	/*
                             Ext.Ajax.request({

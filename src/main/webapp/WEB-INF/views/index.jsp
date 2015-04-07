@@ -85,9 +85,11 @@
 		<script type="text/javascript" src="/ext-theme-neptune.js"></script>
 		-->
 		<script type="text/javascript" src="${ctx}/static/ext-override.js"></script>
+		<script type="text/javascript" src="${ctx}/privateInfo"></script>
 		<!--
 		<script type="text/javascript" src="${ctx}/static/examples.js"></script>
 		-->
+		 
 		 <script type="text/javascript">
         var appName = '业务基础系统';
         var appVersion = 'v1.0';
@@ -100,7 +102,8 @@
     var globalPageSize=20,
     //全局时间列宽度
     globalDateColumnWidth=160;
-    
+
+    /* 
     var idata = {
   "sysInfo": {
     "errLogAllowedRoles": "administrators"
@@ -167,6 +170,7 @@
     }
   }
 }
+    */
     </script>
 		<script type="text/javascript" src="${ctx}/static/admin/app.js"></script>
 	</body>

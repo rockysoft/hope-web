@@ -154,11 +154,11 @@ Ext.define('Hope.app.sys.rolemenuinfo', {
 
         var actionStore = Ext.create('Ext.data.Store', {
             data: [
-                { "ItemText": "添加", "ItemValue": "Add" },
-                { "ItemText": "修改", "ItemValue": "Edit" },
-                { "ItemText": "删除", "ItemValue": "Delete" },
-                { "ItemText": "数据同步", "ItemValue": "Sync" },
-                { "ItemText": "导出", "ItemValue": "Export" }
+                { "ItemText": "添加", "ItemValue": "create" },
+                { "ItemText": "修改", "ItemValue": "update" },
+                { "ItemText": "删除", "ItemValue": "delete" },
+                { "ItemText": "数据同步", "ItemValue": "sync" },
+                { "ItemText": "导出", "ItemValue": "export" }
             ],
             fields: ['ItemText', 'ItemValue']
         });

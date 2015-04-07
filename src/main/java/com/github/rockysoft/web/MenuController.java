@@ -144,7 +144,7 @@ public class MenuController { //extends BaseController {
 //		Criteria criteria = new Criteria();
 		User user = getCurrentUser();
 		if (user == null)
-			return ResponseUtils.sendFailure("会话过期！", null);
+			return ResponseUtils.sendFailure("会话过期！");
 		Integer userId = user.getId();
 		List<Menu> authorizedMenus = this.accountService.GetAuthorizedMenuTree(userId);
 		//return ResponseUtils.sendTreeMenu(authorizedMenus);

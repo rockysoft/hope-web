@@ -92,6 +92,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 //			throw new UnknownAccountException("No account found for user [" + loginName + "]");
 //	    }
 //		System.out.println("user.getLoginName()======"+user.getLoginName());
+//		System.out.println("ShiroDbRealm======>>>>>>>>>>>>>>>>>>>>>>>>>>>>loginName:"+loginName); 
+//		System.out.println("ShiroDbRealm======>>>>>>>>>>>>>>>>>>>>>>>>>>>>getPassword:"+user.getPassword());
 		token.setRememberMe(true);// 默认为自动登录.
 
 		if (user != null) {
@@ -103,7 +105,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			if (saltStr == null) {
 				throw new AccountException("Null salts are not allowed by this realm.");
 			}
-			byte[] salt = Encodes.decodeHex(saltStr);
+			byte[] salt = Encodes.decodeHex(saltStr);//System.out.println("ShiroDbRealm======>>>>>>>>>>>>>>>>>>>>>>>>>>>>saltStr:"+saltStr); 
 			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getRealName()), user.getPassword(), ByteSource.Util.bytes(salt), getName());
 		} else {
 			throw new UnknownAccountException("No account found for user [" + loginName + "]");
@@ -136,6 +138,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");
 //		AccountConstant.HASH_INTERATIONS
 		matcher.setHashIterations(1024);
+//		matcher.setHashSalted(true);
 		setCredentialsMatcher(matcher);
 	}
 

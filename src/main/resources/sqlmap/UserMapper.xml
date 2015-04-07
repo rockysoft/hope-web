@@ -392,10 +392,10 @@
   <update id="updatePwd" parameterType="map" >
     update USER
     set 
-      PASSWORD = #{parametersMap.password},
-      SALT = #{parametersMap.salt},
-      GMT_MODIFIED = #{parametersMap.gmtModified},
+      PASSWORD = #{password},
+      SALT = #{salt},
+      GMT_MODIFIED = #{gmtModified}
     where
-      ID = #{parametersMap.id}
+      ID = #{id}
   </update>
 </mapper>

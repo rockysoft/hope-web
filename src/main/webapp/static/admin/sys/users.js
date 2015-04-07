@@ -69,7 +69,8 @@ Ext.define('Hope.app.sys.userlist', {
              {name: 'email', mapping: 'email', type: 'string'},
              {name: 'mobile', mapping: 'mobile', type: 'string'},
              {name: 'officePhone', mapping: 'officePhone', type: 'string', persist: true},
-             {name: 'lastLoginTime', mapping: 'lastLoginTime', type: 'string'},
+             //{name: 'lastLoginTime', mapping: 'lastLoginTime', type: 'string'},
+             {name: 'lastLoginTime', mapping: 'lastLoginTime', type: 'date', dateFormat:'c'},
              {name: 'lastLoginIp', mapping: 'lastLoginIp', type: 'string'},
              {name: 'status', mapping: 'status', type: 'string'}
     				]
@@ -162,6 +163,7 @@ Ext.define('Hope.app.sys.userlist', {
             width: globalDateColumnWidth,
             sortable: true,
             xtype: 'datecolumn',
+            //renderer : Ext.util.Format.dateRenderer('Y-m-d H:i:s')
             format: 'Y-m-d H:i:s'
         }, {
             text: "最后登录IP",

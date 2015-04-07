@@ -197,7 +197,8 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
      */  
     @Override  
     protected void setFailureAttribute(ServletRequest request, AuthenticationException ae) {  
-        if (ae instanceof IncorrectCredentialsException)  
+    	//System.out.println("FormAuthenticationCaptchaFilter======>>>>>>>>>>>>>>>>>>>>>>>>>>>>ae:"+ae.getMessage());
+    	if (ae instanceof IncorrectCredentialsException)  
         {  
             request.setAttribute(getFailureKeyAttribute(), "用户名密码不正确");  
         } else  
@@ -289,7 +290,7 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
 				return true;
 		}
 
-		try {
+		try {//System.out.println("FormAuthenticationCaptchaFilter======>>>>>>>>>>>>>>>>>>>>>>>>>>>>onLoginFailure:");
 			response.setCharacterEncoding("UTF-8");
 			PrintWriter out = response.getWriter();
 			String message = e.getClass().getSimpleName();

@@ -1,23 +1,24 @@
 ﻿Ext.define('Hope.app.profile.profileinfo', {
-    extend: 'Ext.ux.custom.HopeWindowInfoPanel',
+    extend: 'Ext.ux.custom.HopeSelfInfoPanel',
     initComponent: function () {
         var me = this;
 
         Ext.define('ProfileInfo', {
             extend: 'Ext.data.Model',
             fields: [
-                'Name', 'Email', 'ButtonAlign'
+                'realName', 'email'//, 'ButtonAlign'
             ]
         });
 
         Ext.apply(this, {
             modelName: 'ProfileInfo',
-            loadUrl: appBaseUri+'User/GetByUserID',
-            saveUrl: appBaseUri+'User/ChangeProfile',
+            loadUrl: appBaseUri+'account/profile',
+            updateUrl: appBaseUri+'account/profile',
             dataId:-1,
             items: [
-                { name: 'Name', xtype: 'textfield', fieldLabel: '姓名', allowBlank: false },
-                { name: 'Email', xtype: 'textfield', fieldLabel: '邮箱', allowBlank: false },
+                { name: 'realName', xtype: 'textfield', fieldLabel: '姓名', allowBlank: false },
+                { name: 'email', xtype: 'textfield', fieldLabel: '邮箱', allowBlank: false }//,
+                /*
                 {
                     xtype: 'radiogroup',
                     fieldLabel: '保存按钮位置',
@@ -29,6 +30,7 @@
                         { boxLabel: '右边', name: 'ButtonAlign', inputValue: 'right', checked: true }
                     ]
                 }
+                */
             ]
         });
 

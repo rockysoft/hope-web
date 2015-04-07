@@ -39,7 +39,7 @@
     </bean>
     <bean id="jacksonMessageConverter"
 				class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" >
-				 
+		<property name="objectMapper" ref="customObjectMapper"></property>		 
   	</bean>
   
     <!-- 返回类型定义 -->  

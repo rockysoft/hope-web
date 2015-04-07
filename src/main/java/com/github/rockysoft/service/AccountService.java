@@ -169,6 +169,18 @@ public class AccountService {
 	
 	
 	/**
+	 * 更新User
+	 * 
+	 * @param user
+	 */
+	@Transactional(readOnly = false)
+	public void changeProfile(User user) {
+		user.setGmtModified(new Date());
+		userMapper.updateByPrimaryKeySelective(user);
+	}
+
+	
+	/**
 	 * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
 	 */
 	private void entryptPassword(User user) {
@@ -392,7 +404,7 @@ public class AccountService {
 	public List<String> getPermissionsByUserId(Integer userId) {
 		List<String> permissionNameList = Lists.newArrayList();
 		List<Role> roleList = roleMapper.getRoleListByUserId(userId);
-		if (roleList.isEmpty()) {
+		//if (roleList.isEmpty()) {
 			for (Role role : roleList) {
 				List<Permission> permissionList = permissionMapper.getPermissionListByRoleId(role.getId());
 //				List<String> permissionNameList = Lists.newArrayList();
@@ -409,9 +421,9 @@ public class AccountService {
 			}
 			//上面这个循环考虑直接一个关联查询一次查出用户所属角色的所有权限。
 			return permissionNameList;
-		} else {
-			return null;
-		}
+		//} else {
+		//	return null;
+		//}
 	}
 
 	public Menu getMenu(int id) {
@@ -925,8 +937,11 @@ public class AccountService {
          return children;
 	}
 	
+	@Transactional(readOnly = false)
 	public int changePwd(Integer userId, String newPwd) {
 		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		System.out.println("-------------->"+Encodes.encodeHex(salt));
+		System.out.println("-------------->"+Encodes.encodeHex(newPwd.getBytes()));
 		byte[] hashPassword = Digests.sha1(newPwd.getBytes(), salt, HASH_INTERATIONS);
 //		User user = new User();
 //		user.setId();
@@ -958,11 +973,13 @@ public class AccountService {
 	
 	
 	public static void main(String[] args) {
-		System.out.println(System.getProperty("user.dir"));
-//		byte[] salt = Digests.generateSalt(8);
-		//user.setSalt(Encodes.encodeHex(salt));
-		byte[] salt = Encodes.decodeHex("15b136cda2ac0ce4");
-		byte[] hashPassword = Digests.sha1("admin".getBytes(), salt, HASH_INTERATIONS);
+		//System.out.println(System.getProperty("user.dir"));
+//		byte[] salt = Digests.generateSalt(8);15b136cda2ac0ce4
+		//user.setSalt(Encodes.encodeHex(salt));0f59a8e5fbf158c8
+		byte[] salt = Encodes.decodeHex("06d433a4217cd3df");
+		System.out.println(Encodes.encodeHex(salt));
+		System.out.println(Encodes.encodeHex("1".getBytes()));
+		byte[] hashPassword = Digests.sha1("1".getBytes(), salt, HASH_INTERATIONS);
 		System.out.println(Encodes.encodeHex(hashPassword));
 //		user.setPassword(Encodes.encodeHex(hashPassword));
 		List<Integer> x = new ArrayList<Integer>();

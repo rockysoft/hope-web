@@ -2,12 +2,12 @@
  * @author Nicolas Ferrero
  * A TabPanel with grouping support.
  */
-Ext.define('Ext.ux.custom.HopeWindowInfoPanel', {
+Ext.define('Ext.ux.custom.HopeSelfInfoPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.Hopewinform',
     initComponent: function () {
         var me = this;
-        me.dataId = me.dataId == undefined ? 0 : me.dataId;
+        //me.dataId = me.dataId == undefined ? 0 : me.dataId;
 
         var reader = Ext.create('Ext.data.JsonReader', {
             model: me.modelName,
@@ -51,13 +51,10 @@ Ext.define('Ext.ux.custom.HopeWindowInfoPanel', {
         this.callParent(arguments);
 
         this.on('boxready', function () {
-            if (me.loadUrl && me.dataId != 0) {
+            if (me.loadUrl) {
                 me.getForm().waitMsgTarget = me.getEl();
                 me.load({
-                    url: me.loadUrl+'/'+me.dataId, method : 'GET',
-                    //params: {
-                     //   'id': me.dataId
-                    //},
+                    url: me.loadUrl, method : 'GET',
                     waitMsg: '数据载入中，请稍候...'
                 });
             }
@@ -74,10 +71,8 @@ Ext.define('Ext.ux.custom.HopeWindowInfoPanel', {
         var me = this;
         if (me.getForm().isValid()) {
             me.getForm().waitMsgTarget = me.getEl();
-            //alert(me.dataId == 0 ? me.saveUrl : me.updateUrl+'/'+me.dataId);
-            var url = me.dataId == 0 ? me.saveUrl : me.updateUrl+'/'+me.dataId;
-            var method = me.dataId == 0 ? "POST" : "PUT";
-            //alert(url);
+            var url = me.updateUrl;
+            var method = "POST";
             me.getForm().submit({
             		//headers: {'Content-Type':'application/json; charset=utf-8'},
                 url: url,

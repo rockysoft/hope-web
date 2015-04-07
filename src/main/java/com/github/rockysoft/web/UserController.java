@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.ui.Model;
 
+import com.github.rockysoft.entity.ChangePasswordVo;
 import com.github.rockysoft.entity.Criteria;
 import com.github.rockysoft.entity.ExtGridReturn;
 import com.github.rockysoft.entity.ExtPager;
@@ -328,25 +329,32 @@ public class UserController {
 	}
 	
 	@RequestMapping(value="changePwd",method=RequestMethod.POST)
-	public @ResponseBody Object changePwd(String oldPwd, String newPwd, String newConfirmPwd) throws Exception{
+	public @ResponseBody Object changePwd(@RequestBody ChangePasswordVo changePasswordVO) throws Exception{
+		String oldPwd = changePasswordVO.getOldPassword();
+		String newPwd = changePasswordVO.getNewPassword();
+		String newConfirmPwd = changePasswordVO.getConfirmPassword();
+		
+		//验证新密码和确认密码是否一致
+		if (!newPwd.equals(newConfirmPwd)) {
+			return ResponseUtils.sendFailure("失败：新密码和确认新密码不一致");
+		}
+		
 		//从session中获取用户名
 		Subject subject = SecurityUtils.getSubject();
 		Session session = subject.getSession();
 		User user = (User)session.getAttribute("CURRENT_USER");
-		byte[] salt = user.getSalt().getBytes();
+		byte[] salt = Encodes.decodeHex(user.getSalt());
 		//验证旧密码是否正确		 
 		byte[] hashPassword = Digests.sha1(oldPwd.getBytes(), salt, 1024);
-		//验证新密码和确认密码是否一致
-		if (user.getPassword().equals(Encodes.encodeHex(hashPassword))) {
-			if (newPwd.equals(newConfirmPwd)) {
-				//更新密码
-				if (this.accountService.changePwd(user.getId(), newPwd)>0) 
-					return ResponseUtils.sendSuccess("修改成功");
-				else 
-					return ResponseUtils.sendFailure("修改失败");
-			}
+		if (!user.getPassword().equals(Encodes.encodeHex(hashPassword))) {
+			return ResponseUtils.sendFailure("失败：原密码不正确");	
 		}
-		return ResponseUtils.sendFailure("修改失败");
+		
+		//更新密码
+		if (this.accountService.changePwd(user.getId(), newPwd)>0) 
+			return ResponseUtils.sendSuccess("修改成功");
+		else 
+			return ResponseUtils.sendFailure("修改失败");
 	}
 
 

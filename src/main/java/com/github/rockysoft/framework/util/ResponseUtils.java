@@ -82,7 +82,7 @@ public class ResponseUtils {
 		}
 		return map;
 	}
-
+/*
 	public static Map<String, Object> sendFailure(String text, Object extra) {
 		Map<String, Object> map = getInstanceMap();
 		map.put(RESPONSE_FAILURE_KEY, true);
@@ -90,7 +90,7 @@ public class ResponseUtils {
 		map.put(RESPONSE_EXTRA_KEY, extra);
 		return map;
 	}
-	
+*/	
 	public static Map<String, Object> sendFailure(String text) {
 		Map<String, Object> map = getInstanceMap();
 		map.put(RESPONSE_SUCCESS_KEY, false);

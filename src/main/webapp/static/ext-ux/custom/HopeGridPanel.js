@@ -19,18 +19,18 @@ Ext.define('Ext.ux.custom.HopeGridPanel', {
         });
 
         var tbarMenus = new Array();//alert(me.cButtons);alert(me.cName+ 'Add');
-        if (Hope.HaveActionMenu(me.cButtons, 'Add')) {
+        if (Hope.HaveActionMenu(me.cButtons, 'create')) {
             tbarMenus.push({
                 xtype: 'button',
                 itemId: 'btnAdd',
                 iconCls: 'icon_add',
                 text: '添加',
                 scope: this,
-                disabled: !Hope.HaveAction(me.cName + 'Add'),
+                disabled: !Hope.HaveAction(me.cName + ':create'),
                 handler: me.onAddClick
             });
         }
-        if (Hope.HaveActionMenu(me.cButtons, 'Edit')) {
+        if (Hope.HaveActionMenu(me.cButtons, 'update')) {
             tbarMenus.push({
                 xtype: 'button',
                 itemId: 'btnEdit',
@@ -41,7 +41,7 @@ Ext.define('Ext.ux.custom.HopeGridPanel', {
                 handler: me.onEditClick
             });
         }
-        if (Hope.HaveActionMenu(me.cButtons, 'Delete')) {
+        if (Hope.HaveActionMenu(me.cButtons, 'delete')) {
             tbarMenus.push({
                 xtype: 'button',
                 itemId: 'btnDelete',
@@ -64,14 +64,14 @@ Ext.define('Ext.ux.custom.HopeGridPanel', {
             });
         }
         */
-        if (Hope.HaveActionMenu(me.cButtons, 'Export')) {
+        if (Hope.HaveActionMenu(me.cButtons, 'export')) {
             tbarMenus.push({
                 xtype: 'splitbutton',
                 itemId: 'btnImport',
                 iconCls: 'icon_arrow_down',
                 text: '导出',
                 scope: this,
-                disabled: !Hope.HaveAction(me.cName + 'Export'),
+                disabled: !Hope.HaveAction(me.cName + ':export'),
                 handler: function () {
                     me.onImportClick(false);
                 },
@@ -143,7 +143,7 @@ Ext.define('Ext.ux.custom.HopeGridPanel', {
             stateful: me.cName ? true : false,
             stateId: me.cName ? (UniqueID + 'gird') : null,
             enableColumnMove: me.cName ? true : false,
-            plugins: Hope.HaveActionMenu(me.cButtons, 'Sync') && Hope.HaveAction(me.cName + 'Edit') ? [this.cellEditing] : this.plugins,
+            plugins: Hope.HaveActionMenu(me.cButtons, 'sync') && Hope.HaveAction(me.cName + ':update') ? [this.cellEditing] : this.plugins,
             selModel: Ext.create('Ext.selection.CheckboxModel'),
             border: false,
             tbar: this.ttoolbar,
@@ -155,8 +155,8 @@ Ext.define('Ext.ux.custom.HopeGridPanel', {
             })
         });
         this.getSelectionModel().on('selectionchange', function (sm, records) {
-            if (me.down('#btnEdit')) me.down('#btnEdit').setDisabled(sm.getCount() != 1 || !Hope.HaveAction(me.cName + 'Edit'));
-            if (me.down('#btnDelete')) me.down('#btnDelete').setDisabled(sm.getCount() == 0 || !Hope.HaveAction(me.cName + 'Delete'));
+            if (me.down('#btnEdit')) me.down('#btnEdit').setDisabled(sm.getCount() != 1 || !Hope.HaveAction(me.cName + ':update'));
+            if (me.down('#btnDelete')) me.down('#btnDelete').setDisabled(sm.getCount() == 0 || !Hope.HaveAction(me.cName + ':delete'));
         });
 
         this.callParent(arguments);
