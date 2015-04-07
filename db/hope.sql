@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50158
 File Encoding         : 65001
 
-Date: 2015-03-30 15:21:39
+Date: 2015-04-07 15:08:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,7 +35,7 @@ CREATE TABLE `menu` (
   PRIMARY KEY (`id`),
   KEY `FK5E13532B60A42591` (`parent_id`),
   CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `menu` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of menu
@@ -43,15 +43,15 @@ CREATE TABLE `menu` (
 INSERT INTO `menu` VALUES ('1', null, '图形报表根菜单', 'Chartbar', '图形报表', '0', 'MENU', null, '', null, '1', '0');
 INSERT INTO `menu` VALUES ('2', null, '系统管理', 'Cog', '系统管理', '1', 'MENU', null, '', null, '1', '0');
 INSERT INTO `menu` VALUES ('3', null, '资源管理菜单', 'Pagepaste', '资源管理', '2', 'MENU', null, null, null, '1', '0');
-INSERT INTO `menu` VALUES ('4', 'Simple.view.user.List1', '饼状图图形报表', 'Chartpie', '饼状图', '0', 'URL', '', 'Add,Edit,Delete,Sync', '1', '1', '1');
-INSERT INTO `menu` VALUES ('5', 'Simple.view.permission.List1', '线性图图形报表', 'Chartline', '线状图', '1', 'URL', '', 'Add,Edit,Delete,Sync', '1', '1', '1');
-INSERT INTO `menu` VALUES ('6', 'Simple.view.DeptMain1', '曲线图图形报表', 'Chartcurve', '曲线图', '2', 'URL', '', 'Add,Edit,Delete,Sync', '1', '1', '1');
-INSERT INTO `menu` VALUES ('7', 'Hope.app.sys.roleactions', '权限管理', 'Reportuser', '权限管理', '2', 'COMPONENT', 'RoleAction', 'Add,Edit,Delete,Sync', '2', '1', '1');
-INSERT INTO `menu` VALUES ('8', 'Hope.app.sys.roles', '角色管理', 'Shield', '角色管理', '3', 'COMPONENT', 'Role', 'Add,Edit,Delete,Sync,Export', '2', '1', '1');
-INSERT INTO `menu` VALUES ('9', 'Hope.app.sys.organizations', '部门管理', 'Chartorganisation', '部门管理', '1', 'COMPONENT', 'Organization', 'Add,Edit,Delete,Sync', '2', '1', '1');
-INSERT INTO `menu` VALUES ('10', 'Hope.app.sys.users', '账号管理', 'Group', '账号管理', '0', 'COMPONENT', 'User', 'Add,Edit,Delete,Sync', '2', '1', '1');
-INSERT INTO `menu` VALUES ('11', '', '数据字典', 'Bookopen', '数据字典', '0', 'COMPONENT', 'SysConfig', 'Add,Edit,Delete,Sync', '3', '1', '1');
-INSERT INTO `menu` VALUES ('12', 'Hope.app.sys.rolemenus', '菜单管理', 'Outline', '菜单管理', '4', 'COMPONENT', 'RoleMenu', 'Add,Edit,Delete,Sync', '2', '1', '1');
+INSERT INTO `menu` VALUES ('4', 'Simple.view.user.List1', '饼状图图形报表', 'Chartpie', '饼状图', '0', 'URL', '', 'create,update,delete,sync', '1', '1', '1');
+INSERT INTO `menu` VALUES ('5', 'Simple.view.permission.List1', '线性图图形报表', 'Chartline', '线状图', '1', 'URL', '', 'create,update,delete,sync', '1', '1', '1');
+INSERT INTO `menu` VALUES ('6', 'Simple.view.DeptMain1', '曲线图图形报表', 'Chartcurve', '曲线图', '2', 'URL', '', 'create,update,delete,sync', '1', '1', '1');
+INSERT INTO `menu` VALUES ('7', 'Hope.app.sys.roleactions', '权限管理', 'Reportuser', '权限管理', '2', 'COMPONENT', 'permission', 'create,update,delete,sync', '2', '1', '1');
+INSERT INTO `menu` VALUES ('8', 'Hope.app.sys.roles', '角色管理', 'Shield', '角色管理', '3', 'COMPONENT', 'role', 'create,update,delete,sync,export', '2', '1', '1');
+INSERT INTO `menu` VALUES ('9', 'Hope.app.sys.organizations', '部门管理', 'Chartorganisation', '部门管理', '1', 'COMPONENT', 'organization', 'create,update,delete', '2', '1', '1');
+INSERT INTO `menu` VALUES ('10', 'Hope.app.sys.users', '账号管理', 'Group', '账号管理', '0', 'COMPONENT', 'user', 'create,update,delete,sync', '2', '1', '1');
+INSERT INTO `menu` VALUES ('11', '', '数据字典', 'Bookopen', '数据字典', '0', 'COMPONENT', 'sysConfig', 'create,update,delete,sync', '3', '1', '1');
+INSERT INTO `menu` VALUES ('12', 'Hope.app.sys.rolemenus', '菜单管理', 'Outline', '菜单管理', '4', 'COMPONENT', 'menu', 'create,update,delete,sync', '2', '1', '1');
 
 -- ----------------------------
 -- Table structure for organization
@@ -66,7 +66,7 @@ CREATE TABLE `organization` (
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `organization_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `organization` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of organization
@@ -78,7 +78,6 @@ INSERT INTO `organization` VALUES ('4', '市场部', '0', '1', '3');
 INSERT INTO `organization` VALUES ('5', '研发部', null, '1', '4');
 INSERT INTO `organization` VALUES ('6', '研发一部', '111111', '5', '1');
 INSERT INTO `organization` VALUES ('7', '研发二部', '5556666999', '5', '2');
-INSERT INTO `organization` VALUES ('8', '12312', 'swfsf', '5', '3');
 
 -- ----------------------------
 -- Table structure for permission
@@ -90,20 +89,29 @@ CREATE TABLE `permission` (
   `description` varchar(255) DEFAULT NULL COMMENT '权限描述',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of permission
 -- ----------------------------
-INSERT INTO `permission` VALUES ('1', 'user:edit', '修改用户1');
+INSERT INTO `permission` VALUES ('1', 'user:update', '修改用户1');
 INSERT INTO `permission` VALUES ('2', 'user:delete', '注销用户4444');
 INSERT INTO `permission` VALUES ('3', 'role:view', '浏览角色1');
 INSERT INTO `permission` VALUES ('4', 'role:create', '创建角色');
-INSERT INTO `permission` VALUES ('5', 'role:edit', '修改角色000');
+INSERT INTO `permission` VALUES ('5', 'role:update', '修改角色000');
 INSERT INTO `permission` VALUES ('6', 'role:delete', '注销角色');
 INSERT INTO `permission` VALUES ('7', 'user:view', '浏览用户');
 INSERT INTO `permission` VALUES ('8', 'user:create', '创建用户');
-INSERT INTO `permission` VALUES ('9', 'a:save', 'sfsdfsd');
+INSERT INTO `permission` VALUES ('9', 'organization:create', '创建部门');
+INSERT INTO `permission` VALUES ('10', 'organization:update', '修改部门');
+INSERT INTO `permission` VALUES ('11', 'organization:delete', '删除部门');
+INSERT INTO `permission` VALUES ('12', 'organization:view', '浏览部门');
+INSERT INTO `permission` VALUES ('13', 'permission:create', '创建权限');
+INSERT INTO `permission` VALUES ('14', 'permission:update', '修改权限');
+INSERT INTO `permission` VALUES ('15', 'permission:delete', '删除权限');
+INSERT INTO `permission` VALUES ('16', 'menu:create', '创建菜单');
+INSERT INTO `permission` VALUES ('17', 'menu:update', '修改菜单');
+INSERT INTO `permission` VALUES ('18', 'menu:delete', '删除菜单');
 
 -- ----------------------------
 -- Table structure for role
@@ -119,8 +127,8 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', '管理员', '管理员');
-INSERT INTO `role` VALUES ('2', '测试1', '修改代码测试123A');
+INSERT INTO `role` VALUES ('1', 'Administrators', '管理员');
+INSERT INTO `role` VALUES ('2', 'Users', '修改代码测试123A');
 INSERT INTO `role` VALUES ('3', '测试角色', '测试角色');
 
 -- ----------------------------
@@ -174,7 +182,7 @@ CREATE TABLE `role_permission` (
   KEY `permission_id` (`permission_id`),
   CONSTRAINT `role_permission_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`),
   CONSTRAINT `role_permission_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8 COMMENT='角色-权限关系表';
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8 COMMENT='角色-权限关系表';
 
 -- ----------------------------
 -- Records of role_permission
@@ -200,6 +208,36 @@ INSERT INTO `role_permission` VALUES ('21', '1', '7');
 INSERT INTO `role_permission` VALUES ('22', '1', '8');
 INSERT INTO `role_permission` VALUES ('23', '1', '2');
 INSERT INTO `role_permission` VALUES ('24', '1', '3');
+INSERT INTO `role_permission` VALUES ('25', '1', '4');
+INSERT INTO `role_permission` VALUES ('26', '1', '5');
+INSERT INTO `role_permission` VALUES ('27', '1', '6');
+INSERT INTO `role_permission` VALUES ('28', '1', '7');
+INSERT INTO `role_permission` VALUES ('29', '1', '8');
+INSERT INTO `role_permission` VALUES ('30', '1', '1');
+INSERT INTO `role_permission` VALUES ('31', '1', '2');
+INSERT INTO `role_permission` VALUES ('32', '1', '3');
+INSERT INTO `role_permission` VALUES ('33', '1', '9');
+INSERT INTO `role_permission` VALUES ('34', '1', '10');
+INSERT INTO `role_permission` VALUES ('35', '1', '11');
+INSERT INTO `role_permission` VALUES ('36', '1', '12');
+INSERT INTO `role_permission` VALUES ('37', '1', '4');
+INSERT INTO `role_permission` VALUES ('38', '1', '5');
+INSERT INTO `role_permission` VALUES ('39', '1', '6');
+INSERT INTO `role_permission` VALUES ('40', '1', '7');
+INSERT INTO `role_permission` VALUES ('41', '1', '8');
+INSERT INTO `role_permission` VALUES ('42', '1', '1');
+INSERT INTO `role_permission` VALUES ('43', '1', '2');
+INSERT INTO `role_permission` VALUES ('44', '1', '3');
+INSERT INTO `role_permission` VALUES ('45', '1', '9');
+INSERT INTO `role_permission` VALUES ('46', '1', '10');
+INSERT INTO `role_permission` VALUES ('47', '1', '11');
+INSERT INTO `role_permission` VALUES ('48', '1', '12');
+INSERT INTO `role_permission` VALUES ('49', '1', '13');
+INSERT INTO `role_permission` VALUES ('50', '1', '14');
+INSERT INTO `role_permission` VALUES ('51', '1', '15');
+INSERT INTO `role_permission` VALUES ('52', '1', '16');
+INSERT INTO `role_permission` VALUES ('53', '1', '17');
+INSERT INTO `role_permission` VALUES ('54', '1', '18');
 
 -- ----------------------------
 -- Table structure for user
@@ -232,7 +270,7 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '2', 'admin', '721d083e6f2b7882ed04f698e31afca451252ddb', '15b136cda2ac0ce4', '管理员', '1', 'boychen@21cn.com', '', '123456789', '0', null, null, null, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '1');
+INSERT INTO `user` VALUES ('1', '2', 'admin', '90dc23253021c713053cb915765c3052bafa0891', '201f9dec2a970c12', '管理员1', '1', 'boychen111@21cn.com', '', '123456789', '0', '2015-04-03 11:28:23', '127.0.0.1', null, '0000-00-00 00:00:00', '2015-04-03 10:41:57', '1');
 INSERT INTO `user` VALUES ('4', '4', 'a1', 'd864a4dded527d467fc2bd24a26f0cb3372c4bb7', '910b1352d9605e93', '1', '2', '1@a.com', null, null, '0', null, null, null, '2014-11-09 00:07:26', '2014-11-09 00:07:26', '1');
 INSERT INTO `user` VALUES ('5', '2', '2', '1f000cfc12cebb82ff0e05357bfa09aeb3bda29c', 'ae153f67dd3763ea', '2', '1', '2@b.com', null, null, '0', null, null, null, '2014-11-09 11:11:49', '2014-11-09 11:11:49', '1');
 
@@ -258,3 +296,25 @@ INSERT INTO `user_role` VALUES ('11', '6', '3');
 INSERT INTO `user_role` VALUES ('12', '7', '1');
 INSERT INTO `user_role` VALUES ('22', '4', '2');
 INSERT INTO `user_role` VALUES ('23', '5', '1');
+
+-- ----------------------------
+-- Function structure for queryChildrenDeptInfo
+-- ----------------------------
+DROP FUNCTION IF EXISTS `queryChildrenDeptInfo`;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `queryChildrenDeptInfo`(deptId INT) RETURNS varchar(4000) CHARSET utf8
+BEGIN
+DECLARE sTemp VARCHAR(4000);
+DECLARE sTempChd VARCHAR(4000);
+
+SET sTemp = '$';
+SET sTempChd = cast(deptId as char);
+
+WHILE sTempChd is not NULL DO
+SET sTemp = CONCAT(sTemp,',',sTempChd);
+SELECT group_concat(dept_id) INTO sTempChd FROM department where FIND_IN_SET(dept_parent_id,sTempChd)>0;
+END WHILE;
+return sTemp;
+END
+;;
+DELIMITER ;
