@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.service.AccountService;
-import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+//import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+import com.github.rockysoft.service.ShiroDbRealm.Principal;
 
 public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
 	
@@ -236,7 +237,7 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
                 role1.getId());  
         session.setAttribute(CommonAction.MANAGER_SESSION_CODE, user);  
         */
-        ShiroUser su = (ShiroUser)subject.getPrincipal();
+        Principal su = (Principal)subject.getPrincipal();
         User user = accountService.findUserByLoginName(su.getLoginName()); 
         session.setAttribute("CURRENT_USER", user);
         

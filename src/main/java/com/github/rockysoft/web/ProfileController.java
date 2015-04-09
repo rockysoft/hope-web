@@ -20,7 +20,8 @@ import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.util.ResponseUtils;
 import com.github.rockysoft.service.AccountService;
-import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+import com.github.rockysoft.service.ShiroDbRealm.Principal;
+//import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
 import com.github.rockysoft.viewmodel.UserModel;
 import com.google.common.collect.Lists;
 
@@ -47,7 +48,12 @@ public class ProfileController {
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public @ResponseBody Object get() throws Exception{
-		User user = this.accountService.getCurrentUser(); 
+		Principal principal = this.accountService.getCurrentUser(); 
+		if (principal == null) 
+			return "redirect:/home/";
+		User user = accountService.getUser(principal.getId());
+		if (user == null)
+			return ResponseUtils.sendFailure("会话过期！");
 		UserModel model = new UserModel();
 		model.setId(user.getId());
 		model.setOrgId(user.getOrgId());
@@ -67,11 +73,12 @@ public class ProfileController {
 	 */
 	@RequestMapping(method = RequestMethod.POST)
 	public @ResponseBody Object profile(@RequestBody UserModel model) {
-		ShiroUser sUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		if (sUser == null)
+//		ShiroUser sUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		Principal principal = this.accountService.getCurrentUser();
+		if (principal == null)
 			return "redirect:/home/";
 		User user = new User();//accountService.getUser(sUser.getId());
-		user.setId(sUser.getId());
+		user.setId(principal.getId());
 //		if (user == null)
 //			return "redirect:/home/";
 		user.setEmail(model.getEmail());
@@ -89,8 +96,9 @@ public class ProfileController {
 	 * @param userName
 	 */
 	private void updateCurrentUserName(String userName) {
-		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		user.setName(userName);
+//		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		Principal sUser = this.accountService.getCurrentUser();
+		sUser.setName(userName);
 	}
 	
 		/**

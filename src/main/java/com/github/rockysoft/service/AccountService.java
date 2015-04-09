@@ -13,6 +13,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 //import org.springframework.data.domain.Page;
@@ -48,7 +49,8 @@ import com.github.rockysoft.mapper.ResourceMapper;
 import com.github.rockysoft.mapper.RoleMapper;
 import com.github.rockysoft.mapper.UserMapper;
 import com.github.rockysoft.mapper.UserRoleMapper;
-import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+import com.github.rockysoft.service.ShiroDbRealm.Principal;
+//import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
 import com.google.common.collect.Lists;
 
 
@@ -105,9 +107,18 @@ public class AccountService {
 	 * 
 	 * @return
 	 */
+	/*
 	public User getCurrentUser() {
 		ShiroUser sUser = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		return userMapper.selectByPrimaryKey(sUser != null ? sUser.getId() : null);
+	}
+	*/
+	public Principal getCurrentUser(){
+		  Subject subject=SecurityUtils.getSubject();
+		  if (subject != null && subject.getPrincipal() != null && subject.getPrincipal() instanceof Principal) {
+		    return (Principal)subject.getPrincipal();
+		  }
+		  return null;
 	}
 
 	/**

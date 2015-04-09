@@ -106,7 +106,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				throw new AccountException("Null salts are not allowed by this realm.");
 			}
 			byte[] salt = Encodes.decodeHex(saltStr);//System.out.println("ShiroDbRealm======>>>>>>>>>>>>>>>>>>>>>>>>>>>>saltStr:"+saltStr); 
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getRealName()), user.getPassword(), ByteSource.Util.bytes(salt), getName());
+			return new SimpleAuthenticationInfo(new Principal(user.getId(), user.getLoginName(), user.getRealName()), user.getPassword(), ByteSource.Util.bytes(salt), getName());
 		} else {
 			throw new UnknownAccountException("No account found for user [" + loginName + "]");
 //			return null;
@@ -118,7 +118,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		ShiroUser shiroUser = (ShiroUser) principals.getPrimaryPrincipal();
+		Principal shiroUser = (Principal) principals.getPrimaryPrincipal();
 		List<String> permissionNameList = accountService.getPermissionsByUserId(shiroUser.getId());
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		if (permissionNameList!=null && !permissionNameList.isEmpty()) {
@@ -165,13 +165,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	/**
 	 * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
 	 */
-	public static class ShiroUser implements Serializable {
+	public static class Principal implements Serializable {
 		private static final long serialVersionUID = -1181844008511965270L;
 		private int id;
 		private String loginName;
 		private String name;
 
-		public ShiroUser(int id, String loginName, String name) {
+		public Principal(int id, String loginName, String name) {
 			this.id = id;
 			this.loginName = loginName;
 			this.name = name;
@@ -223,7 +223,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			if (getClass() != obj.getClass()) {
 				return false;
 			}
-			ShiroUser other = (ShiroUser) obj;
+//			Principal principal = (Principal) principal;
+			Principal other = (Principal) obj;
 			if (loginName == null) {
 				if (other.loginName != null) {
 					return false;

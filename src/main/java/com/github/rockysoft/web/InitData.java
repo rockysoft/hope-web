@@ -17,7 +17,10 @@ import com.github.rockysoft.entity.MyInfo;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.SysInfo;
 import com.github.rockysoft.entity.User;
+import com.github.rockysoft.framework.util.ResponseUtils;
 import com.github.rockysoft.service.AccountService;
+//import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+import com.github.rockysoft.service.ShiroDbRealm.Principal;
 
 @Controller
 public class InitData {
@@ -26,11 +29,13 @@ public class InitData {
 	private AccountService accountService;
 
 	@RequestMapping(value = "/privateInfo", produces = {"application/javascript"}, method = RequestMethod.GET)
-	public @ResponseBody String init() {
-
-		User currentUser = accountService.getCurrentUser();
-		
-		List<String> actions = accountService.getPermissionsByUserId(currentUser.getId());
+	public @ResponseBody Object init() {
+//		User currentUser = accountService.getCurrentUser();
+		Principal principal = this.accountService.getCurrentUser(); 
+		if (principal == null) 
+			return "redirect:/home/";
+		User currentUser = accountService.getUser(principal.getId());
+		List<String> actions = accountService.getPermissionsByUserId(principal.getId());
 		
 		/*
 		List<String> actions = new ArrayList<String>(); 

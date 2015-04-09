@@ -154,8 +154,10 @@ public class MenuController { //extends BaseController {
 	
 	 public final User getCurrentUser() {
 		 	User user = null;
+		 	//获取“当前操作用户”
 	        Subject currentUser = SecurityUtils.getSubject();
 	        if (null != currentUser) {
+	        	//获取当前用户（被shiro框架封装好）的session实例
 	            Session session = currentUser.getSession();
 	            if (null != session) {
 	                user = (User) session.getAttribute("CURRENT_USER");
