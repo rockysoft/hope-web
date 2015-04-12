@@ -103,7 +103,7 @@
     from USER
     where ID = #{id}
   </select>
-  <select id="findUserByLoginName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <select id="findUserByLoginName" resultMap="userResultMap" parameterType="java.lang.String" >
     select 
     	ID, ORG_ID, LOGIN_NAME, PASSWORD, SALT, REAL_NAME, SEX, EMAIL, STATUS, MOBILE, OFFICE_PHONE, ERROR_COUNT, LAST_LOGIN_TIME, LAST_LOGIN_IP, REMARK
     from USER

@@ -37,14 +37,28 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
-
+	
+	<!-- 加入Aspectj配置 -->  
+	<aop:aspectj-autoproxy />
+	<bean id="logAspect" class="com.github.rockysoft.aop.LogAspect"></bean>  
+	 
+	<!-- AOP事务增强-->
+	<!--
+	<aop:config proxy-target-class="true">  
+ 		<aop:aspect id="myAspect" ref="logAspect">  
+  			<aop:pointcut expression="execution(* com.github.rockysoft.service.*.*(..))" id="logPointCut"/>  
+  			<aop:before pointcut-ref="logPointCut"  method="logAll"/>  
+ 		</aop:aspect>  
+	</aop:config>
+    -->       
+ 
 <!--  
 	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
 	  <constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
 	-->
 	<!-- MyBatis配置 -->
-  <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
   		<property name="dataSource" ref="dataSource" />
   		<!-- 自动扫描entity目录, 省掉Configuration.xml里的手工配置 -->
   		<property name="typeAliasesPackage" value="com.github.rockysoft.entity"/>
@@ -53,7 +67,7 @@
 	</bean>
 		
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口-->
-  <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+  	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 	  <property name="basePackage" value="com.github.rockysoft.mapper" />
 	  <!--  
 	  <property name="annotationClass" value="com.github.rockysoft.repository.mybatis.MyBatisRepository"/>

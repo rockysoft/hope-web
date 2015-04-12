@@ -23,6 +23,7 @@ import com.github.rockysoft.entity.Criteria;
 import com.github.rockysoft.entity.ExtGridReturn;
 import com.github.rockysoft.entity.ExtPager;
 import com.github.rockysoft.entity.Menu;
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.util.ResponseUtils;
@@ -142,16 +143,19 @@ public class MenuController { //extends BaseController {
 	public @ResponseBody Object GetAuthorizedMenuTree() {
 		
 //		Criteria criteria = new Criteria();
-		User user = getCurrentUser();
-		if (user == null)
+		Principal principal = this.accountService.getCurrentUser();
+		User currentUser = principal.getUser();
+//		User user = getCurrentUser();
+		if (currentUser == null)
 			return ResponseUtils.sendFailure("会话过期！");
-		Integer userId = user.getId();
+		Integer userId = currentUser.getId();
 		List<Menu> authorizedMenus = this.accountService.GetAuthorizedMenuTree(userId);
 		//return ResponseUtils.sendTreeMenu(authorizedMenus);
 		return ResponseUtils.sendTreeGrid(authorizedMenus);
 //		return this.accountService.GetMenuTree(criteria, "");
 	}
 	
+	/*
 	 public final User getCurrentUser() {
 		 	User user = null;
 		 	//获取“当前操作用户”
@@ -165,6 +169,7 @@ public class MenuController { //extends BaseController {
 	        }
 	        return user;
 	  };
+	  */
 	
 	
 }

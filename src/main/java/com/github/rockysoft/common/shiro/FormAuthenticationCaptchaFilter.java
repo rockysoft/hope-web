@@ -17,10 +17,10 @@ import org.apache.shiro.web.util.WebUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.service.AccountService;
 //import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
-import com.github.rockysoft.service.ShiroDbRealm.Principal;
 
 public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
 	
@@ -237,9 +237,11 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
                 role1.getId());  
         session.setAttribute(CommonAction.MANAGER_SESSION_CODE, user);  
         */
-        Principal su = (Principal)subject.getPrincipal();
-        User user = accountService.findUserByLoginName(su.getLoginName()); 
+        /*
+        Principal principal = (Principal)subject.getPrincipal();
+        User user = principal.getUser();
         session.setAttribute("CURRENT_USER", user);
+        */
         
 		//不是ajax请求
 		if (!"XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request)

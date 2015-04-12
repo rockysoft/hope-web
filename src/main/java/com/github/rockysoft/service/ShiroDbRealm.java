@@ -28,6 +28,7 @@ import com.github.rockysoft.common.shiro.CaptchaException;
 import com.github.rockysoft.common.shiro.UsernamePasswordCaptchaToken;
 import com.github.rockysoft.constant.AccountConstant;
 import com.github.rockysoft.entity.Permission;
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.utils.Encodes;
@@ -106,7 +107,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				throw new AccountException("Null salts are not allowed by this realm.");
 			}
 			byte[] salt = Encodes.decodeHex(saltStr);//System.out.println("ShiroDbRealm======>>>>>>>>>>>>>>>>>>>>>>>>>>>>saltStr:"+saltStr); 
-			return new SimpleAuthenticationInfo(new Principal(user.getId(), user.getLoginName(), user.getRealName()), user.getPassword(), ByteSource.Util.bytes(salt), getName());
+			return new SimpleAuthenticationInfo(new Principal(user), user.getPassword(), ByteSource.Util.bytes(salt), getName());
 		} else {
 			throw new UnknownAccountException("No account found for user [" + loginName + "]");
 //			return null;
@@ -118,8 +119,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		Principal shiroUser = (Principal) principals.getPrimaryPrincipal();
-		List<String> permissionNameList = accountService.getPermissionsByUserId(shiroUser.getId());
+		Principal principal = (Principal) principals.getPrimaryPrincipal();
+		User currentUser = principal.getUser();
+		List<String> permissionNameList = accountService.getPermissionsByUserId(currentUser.getId());
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		if (permissionNameList!=null && !permissionNameList.isEmpty()) {
 			info.addStringPermissions(permissionNameList);
@@ -165,13 +167,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	/**
 	 * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
 	 */
-	public static class Principal implements Serializable {
+	public static class ShiroUser implements Serializable {
 		private static final long serialVersionUID = -1181844008511965270L;
 		private int id;
 		private String loginName;
 		private String name;
 
-		public Principal(int id, String loginName, String name) {
+		public ShiroUser(int id, String loginName, String name) {
 			this.id = id;
 			this.loginName = loginName;
 			this.name = name;
@@ -224,7 +226,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 				return false;
 			}
 //			Principal principal = (Principal) principal;
-			Principal other = (Principal) obj;
+			ShiroUser other = (ShiroUser) obj;
 			if (loginName == null) {
 				if (other.loginName != null) {
 					return false;

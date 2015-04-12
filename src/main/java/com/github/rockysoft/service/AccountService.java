@@ -33,6 +33,7 @@ import com.github.rockysoft.entity.Menu;
 import com.github.rockysoft.entity.MenuTree;
 import com.github.rockysoft.entity.Organization;
 import com.github.rockysoft.entity.Permission;
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Resource;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.RoleMenu;
@@ -49,7 +50,6 @@ import com.github.rockysoft.mapper.ResourceMapper;
 import com.github.rockysoft.mapper.RoleMapper;
 import com.github.rockysoft.mapper.UserMapper;
 import com.github.rockysoft.mapper.UserRoleMapper;
-import com.github.rockysoft.service.ShiroDbRealm.Principal;
 //import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
 import com.google.common.collect.Lists;
 

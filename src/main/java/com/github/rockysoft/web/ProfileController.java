@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.util.ResponseUtils;
 import com.github.rockysoft.service.AccountService;
-import com.github.rockysoft.service.ShiroDbRealm.Principal;
 //import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
 import com.github.rockysoft.viewmodel.UserModel;
 import com.google.common.collect.Lists;
@@ -51,7 +51,8 @@ public class ProfileController {
 		Principal principal = this.accountService.getCurrentUser(); 
 		if (principal == null) 
 			return "redirect:/home/";
-		User user = accountService.getUser(principal.getId());
+		User user = principal.getUser();
+//		User user = accountService.getUser(principal.getId());
 		if (user == null)
 			return ResponseUtils.sendFailure("会话过期！");
 		UserModel model = new UserModel();
@@ -77,8 +78,9 @@ public class ProfileController {
 		Principal principal = this.accountService.getCurrentUser();
 		if (principal == null)
 			return "redirect:/home/";
+		User currentUser = principal.getUser();
 		User user = new User();//accountService.getUser(sUser.getId());
-		user.setId(principal.getId());
+		user.setId(currentUser.getId());
 //		if (user == null)
 //			return "redirect:/home/";
 		user.setEmail(model.getEmail());
@@ -93,12 +95,14 @@ public class ProfileController {
 	/**
 	 * 更新Shiro中当前用户的用户名.
 	 * 
-	 * @param userName
+	 * @param realName
 	 */
-	private void updateCurrentUserName(String userName) {
+	private void updateCurrentUserName(String realName) {
 //		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
-		Principal sUser = this.accountService.getCurrentUser();
-		sUser.setName(userName);
+		Principal principal = this.accountService.getCurrentUser();
+		User currentUser = principal.getUser();
+		currentUser.setRealName(realName);
+		principal.setUser(currentUser);
 	}
 	
 		/**

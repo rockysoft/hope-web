@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.rockysoft.common.utils.JsonUtils;
 import com.github.rockysoft.entity.MyInfo;
+import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Role;
 import com.github.rockysoft.entity.SysInfo;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.util.ResponseUtils;
 import com.github.rockysoft.service.AccountService;
 //import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
-import com.github.rockysoft.service.ShiroDbRealm.Principal;
 
 @Controller
 public class InitData {
@@ -34,8 +34,11 @@ public class InitData {
 		Principal principal = this.accountService.getCurrentUser(); 
 		if (principal == null) 
 			return "redirect:/home/";
-		User currentUser = accountService.getUser(principal.getId());
-		List<String> actions = accountService.getPermissionsByUserId(principal.getId());
+//		User currentUser = accountService.getUser(principal.getId());
+		User currentUser = principal.getUser();
+		if (currentUser == null)
+			System.out.println("currentUser is null............................");
+		List<String> actions = accountService.getPermissionsByUserId(currentUser.getId());
 		
 		/*
 		List<String> actions = new ArrayList<String>(); 

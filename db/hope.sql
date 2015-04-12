@@ -10,10 +10,32 @@ Target Server Type    : MYSQL
 Target Server Version : 50158
 File Encoding         : 65001
 
-Date: 2015-04-07 15:08:16
+Date: 2015-04-12 23:40:01
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for log
+-- ----------------------------
+DROP TABLE IF EXISTS `log`;
+CREATE TABLE `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '流水号',
+  `user_id` int(11) NOT NULL,
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '操作时间',
+  `content` varchar(8000) NOT NULL DEFAULT '' COMMENT '日志内容',
+  `operation` varchar(250) NOT NULL DEFAULT '' COMMENT '用户所做的操作',
+  PRIMARY KEY (`id`),
+  KEY `log_ibfk_1` (`user_id`),
+  CONSTRAINT `log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='审计日志表';
+
+-- ----------------------------
+-- Records of log
+-- ----------------------------
+INSERT INTO `log` VALUES ('1', '1', '2015-04-12 21:41:09', 'saveUser[参数1，类型：User，值：(getEmail : 6@a.com)(getSalt : 714e1f8f5c659801)(getPlainPassword : 6)(getRoleList : [com.github.rockysoft.entity.Role@36793])(getLoginName : 6)(getOrgId : 3)(getRealName : 6)(getSex : 0)(getGmtCreate : Sun Apr 12 21:41:08 CST 2015)(getGmtModified : Sun Apr 12 21:41:08 CST 2015)(getId : 9)(getPassword : 7d8d03fe27d47304404723b2f4a98601e23e455a)(getStatus : 1)]', '添加');
+INSERT INTO `log` VALUES ('2', '1', '2015-04-12 21:45:33', 'deleteUser[参数1，类型：Integer，值：]', '刪除');
+INSERT INTO `log` VALUES ('3', '1', '2015-04-12 21:46:01', 'updateUser[参数1，类型：User，值：(getEmail : 4@a.com)(getPlainPassword : )(getRoleList : [com.github.rockysoft.entity.Role@144256a])(getLoginName : 4)(getOrgId : 4)(getRealName : 4)(getSex : 0)(getErrorCount : 0)(getGmtModified : Sun Apr 12 21:46:01 CST 2015)(getId : 7)(getPassword : )(getStatus : 1)]', '修改');
 
 -- ----------------------------
 -- Table structure for menu
@@ -265,14 +287,17 @@ CREATE TABLE `user` (
   UNIQUE KEY `idx_login_name` (`login_name`),
   KEY `org_id` (`org_id`),
   CONSTRAINT `user_ibfk_1` FOREIGN KEY (`org_id`) REFERENCES `organization` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '2', 'admin', '90dc23253021c713053cb915765c3052bafa0891', '201f9dec2a970c12', '管理员1', '1', 'boychen111@21cn.com', '', '123456789', '0', '2015-04-03 11:28:23', '127.0.0.1', null, '0000-00-00 00:00:00', '2015-04-03 10:41:57', '1');
+INSERT INTO `user` VALUES ('1', '2', 'admin', '90dc23253021c713053cb915765c3052bafa0891', '201f9dec2a970c12', '管理员', '1', 'boychen111@21cn.com', '', '123456789', '0', '2015-04-03 11:28:23', '127.0.0.1', null, '0000-00-00 00:00:00', '2015-04-03 10:41:57', '1');
 INSERT INTO `user` VALUES ('4', '4', 'a1', 'd864a4dded527d467fc2bd24a26f0cb3372c4bb7', '910b1352d9605e93', '1', '2', '1@a.com', null, null, '0', null, null, null, '2014-11-09 00:07:26', '2014-11-09 00:07:26', '1');
 INSERT INTO `user` VALUES ('5', '2', '2', '1f000cfc12cebb82ff0e05357bfa09aeb3bda29c', 'ae153f67dd3763ea', '2', '1', '2@b.com', null, null, '0', null, null, null, '2014-11-09 11:11:49', '2014-11-09 11:11:49', '1');
+INSERT INTO `user` VALUES ('6', '2', '3', '798d17c56b0586b14df898560b2bd825bdc4f906', '6dfe2ac5ec997f49', '3', '0', '3@a.com', null, null, '0', null, null, null, '2015-04-12 21:25:57', '2015-04-12 21:25:57', '1');
+INSERT INTO `user` VALUES ('7', '4', '4', '9a253be7e03af184d5503191963a2283d9aaacc8', 'df9f099b3433f71b', '4', '0', '4@a.com', null, null, '0', null, null, null, '2015-04-12 21:29:56', '2015-04-12 21:29:56', '1');
+INSERT INTO `user` VALUES ('9', '3', '6', '7d8d03fe27d47304404723b2f4a98601e23e455a', '714e1f8f5c659801', '6', '0', '6@a.com', null, null, '0', null, null, null, '2015-04-12 21:41:08', '2015-04-12 21:41:08', '1');
 
 -- ----------------------------
 -- Table structure for user_role
@@ -283,7 +308,7 @@ CREATE TABLE `user_role` (
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `role_id` int(11) NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_role
@@ -292,10 +317,12 @@ INSERT INTO `user_role` VALUES ('2', '1', '1');
 INSERT INTO `user_role` VALUES ('3', '1', '2');
 INSERT INTO `user_role` VALUES ('9', '3', '3');
 INSERT INTO `user_role` VALUES ('10', '2', '1');
-INSERT INTO `user_role` VALUES ('11', '6', '3');
-INSERT INTO `user_role` VALUES ('12', '7', '1');
 INSERT INTO `user_role` VALUES ('22', '4', '2');
 INSERT INTO `user_role` VALUES ('23', '5', '1');
+INSERT INTO `user_role` VALUES ('24', '6', '2');
+INSERT INTO `user_role` VALUES ('26', '8', '1');
+INSERT INTO `user_role` VALUES ('27', '9', '1');
+INSERT INTO `user_role` VALUES ('28', '7', '1');
 
 -- ----------------------------
 -- Function structure for queryChildrenDeptInfo
