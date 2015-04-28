@@ -2,6 +2,7 @@ package com.github.rockysoft.common.shiro;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -17,10 +18,12 @@ import org.apache.shiro.web.util.WebUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.github.rockysoft.entity.LoginLog;
 import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.service.AccountService;
 //import com.github.rockysoft.service.ShiroDbRealm.ShiroUser;
+import com.github.rockysoft.service.LoginLogService;
 
 public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
 	
@@ -55,6 +58,9 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
     
     @Autowired  
     private AccountService accountService; 
+    
+    @Autowired  
+    private LoginLogService loginLogService; 
  
     /** 
      * 获取验证码提交的参数名称 
@@ -154,44 +160,41 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
         this.allowLoginNum = allowLoginNum;  
     }
     
-    /** 
-     * 重写父类方法，在shiro执行登录时先对比验证码，正确后在登录，否则直接登录失败 
-     */  
-    @Override  
-    protected boolean executeLogin(ServletRequest request,  
-            ServletResponse response) throws Exception  
-    {  
-  
-        Session session = getSubject(request, response).getSession();  
-        // 获取登录次数  
-        Integer number = (Integer) session  
-                .getAttribute(getLoginNumKeyAttribute());  
-  
-        // 首次登录，将该数量记录在session中  
-        if (number == null)  
-        {  
-            number = new Integer(1);  
-            session.setAttribute(getLoginNumKeyAttribute(), number);  
-        }
-        
-     // 如果失败登录次数大于allowLoginNum时，验证验证码  
-        else if (number > getAllowLoginNum() - 1)  
-        {  
-        // 获取当前验证码  
-        String currentCaptcha = (String) session.getAttribute(getSessionCaptchaKeyAttribute());  
-        // 获取用户输入的验证码  
-        String submitCaptcha = getCaptcha(request);  
-        // 如果验证码不匹配，登录失败  
+	/**
+	 * 重写父类方法，在shiro执行登录时先对比验证码，正确后在登录，否则直接登录失败
+	 */
+	@Override
+	protected boolean executeLogin(ServletRequest request,
+			ServletResponse response) throws Exception {
 
-        if ((submitCaptcha == null || submitCaptcha.length() == 0)  
-                || !currentCaptcha.equalsIgnoreCase(submitCaptcha))  
-        {  
-            return onLoginFailure(this.createToken(request, response),  
-                    new AccountException("验证码不正确"), request, response);  
-        }  
-        }
-        return super.executeLogin(request, response);  
-    }
+		Session session = getSubject(request, response).getSession();
+		// 获取登录次数
+		Integer number = (Integer) session
+				.getAttribute(getLoginNumKeyAttribute());
+
+		// 首次登录，将该数量记录在session中
+		if (number == null) {
+			number = new Integer(1);
+			session.setAttribute(getLoginNumKeyAttribute(), number);
+			session.setAttribute("LoginName", request.getParameter("username"));
+		}
+		// 如果失败登录次数大于allowLoginNum时，验证验证码
+		else if (number > getAllowLoginNum() - 1) {
+			// 获取当前验证码
+			String currentCaptcha = (String) session
+					.getAttribute(getSessionCaptchaKeyAttribute());
+			// 获取用户输入的验证码
+			String submitCaptcha = getCaptcha(request);
+			// 如果验证码不匹配，登录失败
+
+			if ((submitCaptcha == null || submitCaptcha.length() == 0)
+					|| !currentCaptcha.equalsIgnoreCase(submitCaptcha)) {
+				return onLoginFailure(this.createToken(request, response),
+						new AccountException("验证码不正确"), request, response);
+			}
+		}
+		return super.executeLogin(request, response);
+	}
   
     /** 
      * 重写父类方法，当登录失败将异常信息设置到request的attribute中 
@@ -243,12 +246,33 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
         session.setAttribute("CURRENT_USER", user);
         */
         
+        //记录登录日志
+        Principal principal = (Principal)subject.getPrincipal();
+        User user = principal.getUser();
+		Integer userId = user.getId();
+		String loginName = user.getLoginName();
+		Date createTime = new Date();
+		String ip = com.github.rockysoft.common.utils.WebUtils.getRemoteIP((HttpServletRequest) request); 
+		Integer type = 1;
+		Integer status = 1;
+		LoginLog loginLog = new LoginLog(userId, loginName, createTime, ip, type, status);
+		loginLogService.log(loginLog);
+		
+		//更新登录时间和登录IP
+		User u = new User();
+		u.setId(userId);
+		u.setLastLoginIp(ip);
+		u.setLastLoginTime(createTime);
+		//accountService.saveUser(u);
+		accountService.updateLogin(u);
+		
 		//不是ajax请求
 		if (!"XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request)
 				.getHeader("X-Requested-With"))) {
 			//issueSuccessRedirect(request, response);
 			return super.onLoginSuccess(token, subject, request, response);
 		}        
+		
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.println("{success:true,message:'登入成功'}");
@@ -285,6 +309,16 @@ public class FormAuthenticationCaptchaFilter extends FormAuthenticationFilter {
 		}
 
 		session.setAttribute(getLoginNumKeyAttribute(), ++number);
+		
+		
+		//记录登录日志
+		String loginName = (String)session.getAttribute("LoginName");
+		Date createTime = new Date();
+		String ip = com.github.rockysoft.common.utils.WebUtils.getRemoteIP((HttpServletRequest) request); 
+		Integer type = 1;
+		Integer status = 2;
+		LoginLog loginLog = new LoginLog(null, loginName, createTime, ip, type, status);
+		loginLogService.log(loginLog);
 		
 		//不是ajax请求
 		if (!"XMLHttpRequest".equalsIgnoreCase(((HttpServletRequest) request)

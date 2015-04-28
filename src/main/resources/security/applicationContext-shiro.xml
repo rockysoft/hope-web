@@ -19,6 +19,11 @@
 	<!-- Shiro Filter -->
 	<bean id="myCaptchaFilter" class="com.github.rockysoft.common.shiro.FormAuthenticationCaptchaFilter"/>
 
+	<!-- Shiro logout Filter -->
+	<bean id="myLogoutFilter" class="com.github.rockysoft.common.shiro.MyLogoutFilter"> 
+        <property name="redirectUrl" value="/login" /> 
+    </bean> 
+    
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
@@ -27,6 +32,7 @@
 		<property name="filters">
   			<map>
         		<entry key="authc" value-ref="myCaptchaFilter"/>
+        		<entry key="logout" value-ref="myLogoutFilter"/>
     		</map>
 		</property>
 		<property name="filterChainDefinitions">

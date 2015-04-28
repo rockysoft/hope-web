@@ -125,13 +125,13 @@ Ext.define('Hope.app.sys.userlist', {
         var columns = [{
             text: "账号",
             dataIndex: 'loginName',
-            width: 120,
+            flex: 1,
             sortable: true,
             editor: {}
         }, {
             text: "姓名",
             dataIndex: 'realName',
-            width: 120,
+            flex: 1,
             sortable: true,
             editor: {}
         },
@@ -151,33 +151,38 @@ Ext.define('Hope.app.sys.userlist', {
 					text: '性别',
 					editor: 'textfield',
 					dataIndex: 'sex',
+					flex: 1,
 					renderer:this.changeSex
         }, {
             text: "电子邮箱",
             dataIndex: 'email',
-            width: 200,
+            flex: 3,
             sortable: true,
             editor: {}
         },{
 					text: '账户状态',
 					editor: 'textfield',
 					dataIndex: 'status',
+					flex: 1,
 					renderer:this.changeStatus
         }, {
             text: "最后登录时间",
             dataIndex: 'lastLoginTime',
-            width: globalDateColumnWidth,
+            flex: 2,
+            //width: globalDateColumnWidth,
             sortable: true,
             xtype: 'datecolumn',
             //renderer : Ext.util.Format.dateRenderer('Y-m-d H:i:s')
             format: 'Y-m-d H:i:s'
         }, {
             text: "最后登录IP",
-            dataIndex: 'lastLoginIp'
+            dataIndex: 'lastLoginIp',
+            flex: 2
         }, {
             text: "创建时间",
             dataIndex: 'AddTime',
-            width: globalDateColumnWidth,
+            flex: 2,
+            //width: globalDateColumnWidth,
             hidden: true,
             sortable: true,
             xtype: 'datecolumn',

@@ -189,6 +189,16 @@ public class AccountService {
 		user.setGmtModified(new Date());
 		userMapper.updateByPrimaryKeySelective(user);
 	}
+	
+	/**
+	 * 更新User
+	 * 
+	 * @param user
+	 */
+	@Transactional(readOnly = false)
+	public void updateLogin(User user) {
+		userMapper.updateByPrimaryKeySelective(user);
+	}
 
 	
 	/**
