@@ -86,7 +86,7 @@ Ext.define('Hope.app.sys.organizations', {
         Ext.apply(this, {
             store: store,
             columns: columns,
-            proxyDeleteUrl: appBaseUri+'account/organizations/remove',//'Team/Delete'
+            proxyDeleteUrl: appBaseUri+'account/organizations/remove' //'Team/Delete'
         });
 
         this.callParent(arguments);
