@@ -364,7 +364,9 @@ var Hope = new Object();
 
 //打开tab
 Hope.openTab = function (tabId, tabTitle, tab, config) {
-    console.log(config);
+	if (window.console) {
+      console.log(config);
+	}
     var _tab = mainTab.getComponent('tab' + tabId);
     if (!_tab) {
         mainTab.setLoading('Loading...');
