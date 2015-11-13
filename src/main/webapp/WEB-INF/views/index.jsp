@@ -13,38 +13,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>业务基础平台</title>
 		<link rel="shortcut icon" href="favicon.ico">
-		<style type="text/css">
-			.x-panel-ghost {
-			    z-index: 1;
-			}
-			.x-border-layout-ct {
-			    background: #DFE8F6;
-			}
-			.x-portal-body {
-			    padding: 0 0 0 8px;
-			}
-			.x-portal .x-portal-column {
-			    padding: 8px 8px 0 0;
-			}
-			.x-portal .x-panel-dd-spacer {
-			    border: 2px dashed #99bbe8;
-			    background: #f6f6f6;
-			    border-radius: 4px;
-			    -moz-border-radius: 4px;
-			    margin-bottom: 10px;
-			}
-			.x-portlet {
-			    margin-bottom:10px;
-			    padding: 1px;
-			}
-			.x-portlet .x-panel-body {
-			    background: #fff;
-			}
-			.portlet-content {
-			    padding: 10px;
-			    font-size: 11px;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="${ctx}/static/ext-ux/portal/css/portal.css" />
 	</head>
 	<body>
 		<!--

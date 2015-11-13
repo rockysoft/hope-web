@@ -16,6 +16,20 @@ var mainTab,
     //全局时间列宽度
     globalDateColumnWidth=160;
 
+	getTools = function () {
+        return [{
+            xtype: 'tool',
+            type: 'gear',
+            handler: function(e, target, header, tool){
+                var portlet = header.ownerCt;
+                portlet.setLoading('Loading...');
+                Ext.defer(function() {
+                    portlet.setLoading(false);
+                }, 2000);
+            }
+        }];
+    };
+
 Ext.onReady(function () {
 		Ext.BLANK_IMAGE_URL = "static/images/s.gif";
     Ext.QuickTips.init();
@@ -32,6 +46,8 @@ Ext.onReady(function () {
     var mainCalendar = Ext.create('Hope.app.calendar', {
     title: '日程管理'
     });*/
+
+	var content = '<div class="portlet-content"></div>';
 
     mainTab = Ext.create('Ext.TabPanel', {
         region: 'center',
@@ -59,6 +75,73 @@ Ext.onReady(function () {
 						title : '平台首页',
 						xtype : 'portalpanel',
 						layout : 'column',
+						items: [{
+                        id: 'col-1',
+                        items: [{
+                            id: 'portlet-1',
+                            title: 'Grid Portlet',
+                            tools: this.getTools(),
+                            items: Ext.create('Ext.ux.portal.GridPortlet'),
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        },{
+                            id: 'portlet-2',
+                            title: '待办事项',
+                            tools: this.getTools(),
+                            html: content,
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        }]
+                    },{
+                        id: 'col-2',
+                        items: [{
+                            id: 'portlet-21',
+                            title: '我的消息',
+                            tools: this.getTools(),
+                            html: '<div class="portlet-content"></div>',
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        },{
+                            id: 'portlet-22',
+                            title: 'Stock Portlet',
+                            tools: this.getTools(),
+                            items: Ext.create('Ext.ux.portal.ChartPortlet'),
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        }]
+                    },{
+                        id: 'col-3',
+                        items: [{
+                            id: 'portlet-31',
+                            title: '系统公告',
+                            tools: this.getTools(),
+                            html: '<div class="portlet-content"></div>',
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        },{
+                            id: 'portlet-32',
+                            title: '快捷通道',
+                            tools: this.getTools(),
+                            html: '<div class="portlet-content"></div>',
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        },{
+                            id: 'portlet-33',
+                            title: '系统信息',
+                            tools: this.getTools(),
+                            html: '<div class="portlet-content"></div>',
+                            listeners: {
+                                'close': Ext.bind(this.onPortletClose, this)
+                            }
+                        }]
+                    }]
+							/*
 						items : [{
 									xtype : 'portalcolumn',
 									columnWidth : 0.7,
@@ -100,6 +183,7 @@ Ext.onReady(function () {
 												iconCls : 'icon-email-list'
 											}]
 								}]
+								*/
 					}]
         
         //[mainPortal]
