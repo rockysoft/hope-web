@@ -1,4 +1,4 @@
-Ext.define('Ext.ux.app.GridPortlet', {
+Ext.define('Ext.ux.portal.GridPortlet', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.gridportlet',
     uses: [

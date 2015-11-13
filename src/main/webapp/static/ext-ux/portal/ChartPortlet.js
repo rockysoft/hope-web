@@ -1,4 +1,4 @@
-Ext.define('Ext.ux.app.ChartPortlet', {
+Ext.define('Ext.ux.portal.ChartPortlet', {
 
     extend: 'Ext.panel.Panel',
     alias: 'widget.chartportlet',
