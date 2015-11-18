@@ -135,7 +135,7 @@ Ext.onReady(function () {
                             id: 'portlet-33',
                             title: '系统信息',
                             tools: this.getTools(),
-                            html: '<div class="portlet-content"></div>',
+                            html: '<div class="portlet-content"><ul class="mnotice-ul"><li>系统：'+idata.serverInfo.osName+'</li><li>版本：'+idata.serverInfo.osVersion+'</li><li>架构：'+idata.serverInfo.osArch+'</li><li>处理器数：'+idata.serverInfo.osAvailableProcessors+'</li><li>负载：'+idata.serverInfo.osSystemLoadAverage+'</li><li>运行：'+idata.serverInfo.vmName+'</li><li>JVM：初始:'+idata.serverInfo.initMemory+' 最大:'+idata.serverInfo.maxMemory+' 使用:'+idata.serverInfo.usedMemory+'</li></ul></div>',
                             listeners: {
                                 'close': Ext.bind(this.onPortletClose, this)
                             }

@@ -1,5 +1,10 @@
 package com.github.rockysoft.web;
 
+import java.lang.management.CompilationMXBean;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
+import java.lang.management.RuntimeMXBean;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,9 +18,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.github.rockysoft.common.utils.JsonUtils;
+import com.github.rockysoft.common.utils.ServerUtil;
 import com.github.rockysoft.entity.MyInfo;
 import com.github.rockysoft.entity.Principal;
 import com.github.rockysoft.entity.Role;
+import com.github.rockysoft.entity.ServerInfo;
 import com.github.rockysoft.entity.SysInfo;
 import com.github.rockysoft.entity.User;
 import com.github.rockysoft.framework.util.ResponseUtils;
@@ -109,9 +116,38 @@ public class InitData {
 		SysInfo sysInfo = new SysInfo();
 		sysInfo.setErrLogAllowedRoles("administrators");
 		
+		ServerInfo serverInfo = new ServerInfo();
+		MemoryMXBean my = ManagementFactory.getMemoryMXBean();
+		String initMemory = my.getHeapMemoryUsage().getInit() / 1000000 + " M";
+		serverInfo.setInitMemory(initMemory);
+		String maxMemory = my.getHeapMemoryUsage().getMax() / 1000000 + " M";
+		serverInfo.setMaxMemory(maxMemory);
+		String usedMemory = my.getHeapMemoryUsage().getUsed() / 1000000 + " M";
+		serverInfo.setUsedMemory(usedMemory);
+		OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
+		String osName = os.getName();
+		serverInfo.setOsName(osName);
+		String osVersion = os.getVersion();
+		serverInfo.setOsVersion(osVersion);
+		String osArch = os.getArch();
+		serverInfo.setOsArch(osArch);
+		int osAvailableProcessors = os.getAvailableProcessors();
+		serverInfo.setOsAvailableProcessors(osAvailableProcessors);
+		double osSystemLoadAverage = os.getSystemLoadAverage();
+		serverInfo.setOsSystemLoadAverage(osSystemLoadAverage);
+		RuntimeMXBean rt = ManagementFactory.getRuntimeMXBean();
+		String vmName = rt.getVmName();
+		serverInfo.setVmName(vmName);
+//		CompilationMXBean gm=(CompilationMXBean)ManagementFactory.getCompilationMXBean();
+//		String compilationName = gm.getName();
+//		String compilationName = ServerUtil.getServerId();
+//		serverInfo.setCompilationName(compilationName);
+//		System.out.println("getTotalCompilationTime "+gm.getTotalCompilationTime());
+		
 		Map<String, Object> iData = new HashMap<String, Object>();
 		iData.put("sysInfo", sysInfo);
 		iData.put("myInfo", myInfo);
+		iData.put("serverInfo", serverInfo);
 		String result = "var idata = " + JsonUtils.map2json(iData);
 		
         return result;
@@ -152,4 +188,20 @@ public class InitData {
         return sysInfo;
     }
     */
+	
+	@RequestMapping(value = "/serverInfo", method = RequestMethod.GET)
+	public @ResponseBody Object serverInfo() {
+		Map<String, String> map = new HashMap<String, String>();
+		MemoryMXBean my = ManagementFactory.getMemoryMXBean();
+		map.put("initMemory", my.getHeapMemoryUsage().getInit() / 1000000
+				+ " M");
+		map.put("maxMemory", my.getHeapMemoryUsage().getMax() / 1000000 + " M");
+		map.put("usedMemory", my.getHeapMemoryUsage().getUsed() / 1000000
+				+ " M");
+		OperatingSystemMXBean os = ManagementFactory.getOperatingSystemMXBean();
+		map.put("osName", os.getName());
+		RuntimeMXBean rt = ManagementFactory.getRuntimeMXBean();
+		map.put("vmName", rt.getVmName());
+        return map;
+	}
 }
