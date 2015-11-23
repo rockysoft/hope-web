@@ -281,8 +281,8 @@ Ext.onReady(function () {
         }],
         listeners: {
             'itemclick': function (e, record) {
-                if (record.data.leaf) {
-                    Hope.openTab(record.data.id, record.data.text, record.raw.url, {
+                if (record.data.leaf) { alert(record.raw.type);
+                    Hope.openTab(record.data.id, record.data.text, record.raw.type, record.raw.url, {
                         cButtons: record.raw.buttons ? record.raw.buttons.split(',') : [],
                         cName: record.raw.controller,
                         cParams: record.raw.MenuConfig
@@ -447,23 +447,36 @@ Ext.onReady(function () {
 var Hope = new Object();
 
 //打开tab
-Hope.openTab = function (tabId, tabTitle, tab, config) {
+Hope.openTab = function (tabId, tabTitle, tabType, tab, config) {
 	if (window.console) {
-      console.log(config);
+      console.log(config);console.log(tabType);
 	}
     var _tab = mainTab.getComponent('tab' + tabId);
     if (!_tab) {
         mainTab.setLoading('Loading...');
-        _tab = Ext.create('Ext.panel.Panel', {
-            closable: true,
-            id: 'tab' + tabId,
-            title: tabTitle,
-            layout: 'fit',
-            autoScroll: true,
-            border: false,
-            //items: typeof (tab) == 'string' ? Ext.create('Hope.app.' + tab, config) : tab
-            items: typeof (tab) == 'string' ? Ext.create(tab, config) : tab
-        });
+
+		if (tabType === 'URL')
+		{
+			_tab = Ext.create('Ext.panel.Panel', {
+					id: 'tab' + tabId,
+                    title : tabTitle,  
+                    closable : true,  
+                    iconCls : 'icon-activity',  
+                    html : '<iframe width="100%" height="100%" frameborder="0" src="' + tab + '"></iframe>'  
+			});
+		} else if(tabType === 'COMPONENT'){
+			_tab = Ext.create('Ext.panel.Panel', {
+				closable: true,
+				id: 'tab' + tabId,
+				title: tabTitle,
+				layout: 'fit',
+				autoScroll: true,
+				border: false,
+				//items: typeof (tab) == 'string' ? Ext.create('Hope.app.' + tab, config) : tab
+				items: typeof (tab) == 'string' ? Ext.create(tab, config) : tab
+			});
+		}
+      
         mainTab.add(_tab);
         mainTab.setLoading(false);
     }
