@@ -71,7 +71,7 @@ Ext.onReady(function () {
         					
         ],
         items: [{
-						iconCls : 'icon-activity',
+						iconCls : 'icon-home',
 						title : '平台首页',
 						xtype : 'portalpanel',
 						layout : 'column',
@@ -249,6 +249,7 @@ Ext.onReady(function () {
 
     var treePanel = Ext.create('Ext.tree.Panel', {
         id: 'menuTree',
+		iconCls : 'icon-nav',  
         region: 'west',
         split: true,
         title: '功能导航',
