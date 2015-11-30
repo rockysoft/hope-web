@@ -221,3 +221,7 @@
     background:transparent url(../images/icon/download.gif) no-repeat bottom left;
     height:46px;
 }
+
+.icon-group{
+	background-image: url(../images/icon/group.png) !important;
+}

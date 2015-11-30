@@ -282,8 +282,8 @@ Ext.onReady(function () {
         }],
         listeners: {
             'itemclick': function (e, record) {
-                if (record.data.leaf) { alert(record.raw.type);
-                    Hope.openTab(record.data.id, record.data.text, record.raw.type, record.raw.url, {
+                if (record.data.leaf) { //alert(record.raw.type);
+                    Hope.openTab(record.data.id, record.data.text, record.raw.type, record.raw.iconCls, record.raw.url, {
                         cButtons: record.raw.buttons ? record.raw.buttons.split(',') : [],
                         cName: record.raw.controller,
                         cParams: record.raw.MenuConfig
@@ -448,7 +448,7 @@ Ext.onReady(function () {
 var Hope = new Object();
 
 //打开tab
-Hope.openTab = function (tabId, tabTitle, tabType, tab, config) {
+Hope.openTab = function (tabId, tabTitle, tabType, tabIconCls, tab, config) {
 	if (window.console) {
       console.log(config);console.log(tabType);
 	}
@@ -462,7 +462,7 @@ Hope.openTab = function (tabId, tabTitle, tabType, tab, config) {
 					id: 'tab' + tabId,
                     title : tabTitle,  
                     closable : true,  
-                    iconCls : 'icon-activity',  
+                    iconCls : tabIconCls,  
                     html : '<iframe width="100%" height="100%" frameborder="0" src="' + tab + '"></iframe>'  
 			});
 		} else if(tabType === 'COMPONENT'){
@@ -470,6 +470,7 @@ Hope.openTab = function (tabId, tabTitle, tabType, tab, config) {
 				closable: true,
 				id: 'tab' + tabId,
 				title: tabTitle,
+				iconCls : tabIconCls,
 				layout: 'fit',
 				autoScroll: true,
 				border: false,
